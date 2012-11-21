@@ -4,10 +4,8 @@ import java.util.ArrayList;
 
 public class Player
 {
-
     public final String name;
     
-    // Time-tracking properties, each player gets 2 mins
     private long remainingTime = 120 * 1000; 
     private long lastActionStartTime;
     
