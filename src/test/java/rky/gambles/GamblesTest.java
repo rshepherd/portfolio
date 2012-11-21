@@ -10,9 +10,9 @@ import rky.gambles.Gambles;
 public class GamblesTest {
 
 	@Test
-	public void test() 
+	public void testRandomGen() 
 	{
-//		Gambles.seedRandomGenerator( 1 );
+		//Gambles.seedRandomGenerator( 1 );
 		
 		Gamble g;
 		
@@ -33,6 +33,19 @@ public class GamblesTest {
 			}
 		}
 		
+	}
+	
+	
+	
+	@Test
+	public void testPlayGambles()
+	{
+		Gambles.seedRandomGenerator( 1 );
+		
+		Gamble g;
+		
+		g = Gambles.randomGamble(2.0);
+		Return gReturn = Gambles.playGamble(g);
 	}
 
 }
