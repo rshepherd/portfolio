@@ -3,6 +3,8 @@
  */
 package rky.gambles;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -88,6 +90,55 @@ public class Gambles
 			ret = false;
 		
 		return ret;
+	}
+	
+	/**
+	 * Plays Gamble g as is - rolls the dice and gives a return type based on the Gamble's probabilities.
+	 * @param g Gamble to be played
+	 * @return Type of Return on the gamble.
+	 */
+	public static Return playGamble( Gamble g )
+	{
+		double probe = random.nextDouble();
+		
+		if( probe <= g.getP(Return.low) )
+			return Return.low;
+		if( probe - g.getP(Return.low) <= g.getP(Return.medium) )
+			return Return.medium;
+		else
+			return Return.high;
+	}
+	
+	/**
+	 * Plays Gamble g taking into consideration its class and gambles linked to g which have already been played.
+	 * @param g Gamble to be played.
+	 * @param classOfG Class that G belongs to.
+	 * @param playedGambles A mapping of gambles which were already played to the returns they yielded.
+	 * @param linksOfG A collection of Gambles which are linked to Gamble g 
+	 * @return Type of Return on the gamble.
+	 */
+	public static Return playGamble( Gamble g, GambleClass classOfG, Map<Gamble, Return> playedGambles, Collection<Gamble> linksOfG )
+	{
+		// Original gamble g with probabilities modified by its class.
+		Gamble gc = new Gamble( g, classOfG.getLuck() );
+		
+		int Hi = 0;
+		int Mi = 0;
+		int Li = 0;
+		for( Gamble linked : linksOfG )
+		{
+			Return returnOfLinked = playedGambles.get( linked );
+			if     ( returnOfLinked == Return.high   )    ++Hi;
+			else if( returnOfLinked == Return.medium )    ++Mi;
+			else if( returnOfLinked == Return.low    )    ++Li;
+			else ;   // do nothing: the linked gamble has not been played
+		}
+		
+		// modify probabilities based on linked gambles' results
+		if     ( Hi > Mi + Li )    gc = new Gamble( gc, Luck.favorable );
+		else if( Li > Mi + Hi )    gc = new Gamble( gc, Luck.unfavorable );
+		
+		return playGamble( gc );
 	}
 	
 	
