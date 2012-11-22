@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rky.gambles;
+package rky.portfolio.gambles;
 
 import java.util.Collection;
 import java.util.Map;
@@ -58,6 +58,10 @@ public class Gambles
 		return new Gamble( reth, probh, retm, probm, retl, probl );
 	}
 	
+	/**
+	 * @param g
+	 * @return
+	 */
 	public static double expectedReturn( Gamble g )
 	{
 		return  g.getV(Return.high)   * g.getP(Return.high) + 

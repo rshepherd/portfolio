@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rky.gambles;
+package rky.portfolio.gambles;
 
 /**
  * @author stoked
@@ -27,7 +27,7 @@ public class Gamble
 	
 	public Gamble()
 	{
-		this( 3, 0.3, 2, 0.8, 1 );
+		this( 3, 0.3, 2, 0.4, 1 );
 	}
 	
 	public Gamble( double vh, double ph, double vm, double pm, double vl )

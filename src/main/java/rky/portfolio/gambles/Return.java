@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rky.gambles;
+package rky.portfolio.gambles;
 
 /**
  * @author stoked
