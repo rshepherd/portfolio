@@ -1,5 +1,7 @@
 package rky.portfolio;
 
+import rky.portfolio.io.IoManager;
+
 
 public class Main
 {
@@ -16,6 +18,9 @@ public class Main
         int numPlayers = Integer.parseInt(args[1]);
         int gameMode = Integer.parseInt(args[2]);
         boolean gui = args.length == 4 ? true : false;
+        
+        IoManager io = new IoManager(port);
+        //io.connect(numPlayers);
 
     }
     

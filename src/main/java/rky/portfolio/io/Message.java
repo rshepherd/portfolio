@@ -19,9 +19,9 @@ public class Message
         }
     }
 
-    public static Message createVector(Double[] vector)
+    public static Message createVector(String[] s)
     {
-        return new Message(arrayToString(vector));
+        return new Message(formatArray(s));
     }
 
     public static Message createError(String errorMessage)
@@ -34,7 +34,7 @@ public class Message
         return new Message("GAMEOVER " + score);
     }
 
-    private static String arrayToString(Double[] a)
+    private static String formatArray(String[] a)
     {
         StringBuffer result = new StringBuffer();
         result.append("[");
