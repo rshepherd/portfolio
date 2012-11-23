@@ -97,7 +97,7 @@ public class Gamble
 	
 	public String toString()
 	{
-		return "Gamble[P(" + reth + ")=" + probh + " P(" + retm + ")=" + probm + " P(" + retl + ")=" + probl +"]";
+		return String.format("Gamble[P(%f, %f, %f) V(%f, %f, %f)]", probh, probm, probl, reth, retm, retl);
 	}
 	
 }

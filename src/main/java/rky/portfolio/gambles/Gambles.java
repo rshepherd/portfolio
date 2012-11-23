@@ -59,8 +59,8 @@ public class Gambles
 	}
 	
 	/**
-	 * @param g
-	 * @return
+	 * @param g Gamble whose expected return is calculated
+	 * @return expected return value
 	 */
 	public static double expectedReturn( Gamble g )
 	{
@@ -116,15 +116,15 @@ public class Gambles
 	/**
 	 * Plays Gamble g taking into consideration its class and gambles linked to g which have already been played.
 	 * @param g Gamble to be played.
-	 * @param classOfG Class that G belongs to.
+	 * @param classLuck Luck of class that g belongs to.
 	 * @param playedGambles A mapping of gambles which were already played to the returns they yielded.
 	 * @param linksOfG A collection of Gambles which are linked to Gamble g 
 	 * @return Type of Return on the gamble.
 	 */
-	public static Return playGamble( Gamble g, GambleClass classOfG, Map<Gamble, Return> playedGambles, Collection<Gamble> linksOfG )
+	public static Return playGamble( Gamble g, Luck classLuck, Map<Gamble, Return> playedGambles, Collection<Gamble> linksOfG )
 	{
 		// Original gamble g with probabilities modified by its class.
-		Gamble gc = new Gamble( g, classOfG.getLuck() );
+		Gamble gc = new Gamble( g, classLuck );
 		
 		int Hi = 0;
 		int Mi = 0;
