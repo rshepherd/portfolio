@@ -19,6 +19,10 @@ public class Message
         }
     }
 
+    /**
+     * Takes an array of String values and forms a message body
+     * is in the format "[v1, v2, v3, v4 ... ]"
+     */
     public static Message createVector(String[] s)
     {
         return new Message(formatArray(s));
