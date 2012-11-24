@@ -52,7 +52,7 @@ public class Controller extends JApplet {
 	private MyPanel showPanel = new MyPanel();
 
 	private JTable infoTable = new JTable();
-	private JEditorPane editorPane = new JEditorPane();
+	//private JEditorPane editorPane = new JEditorPane();
 
 	private JButton playButton = new JButton("Play");
 	private JButton startButton = new JButton("Start");
@@ -61,9 +61,9 @@ public class Controller extends JApplet {
 	private JTextField roundField = new JTextField();
 	private JLabel roundReminder = new JLabel("Current Round : ", JLabel.CENTER);
 	private JLabel roundDigit = new JLabel("0", JLabel.CENTER);
-    private JRadioButton mode1Button = new JRadioButton("Mode 1");
-    private JRadioButton mode2Button = new JRadioButton("Mode 2");
-    private ButtonGroup group = new ButtonGroup();
+	private JRadioButton mode1Button = new JRadioButton("Mode 1");
+	private JRadioButton mode2Button = new JRadioButton("Mode 2");
+	private ButtonGroup group = new ButtonGroup();
 
 
 
@@ -85,15 +85,15 @@ public class Controller extends JApplet {
 	private List<Double> oneRoundResult = new ArrayList<Double>();
 	private List<Integer> roundToChangeType = new ArrayList<Integer>();
 	private DefaultTableModel dtm;
-	
-	
+
+
 	public String getWinner()
 	{
 		return winner;
 	}
-	
+
 	public void init() {
-		
+
 		// Execute a job on the event-dispatching thread:
 		// creating this applet's GUI.
 		try {
@@ -113,12 +113,12 @@ public class Controller extends JApplet {
 	 * Init game
 	 */
 	public void initGame() throws Exception {
-		
+
 		if(mode1Button.isSelected())
 			MODE = 1;
 		else
 			MODE = 2;
-		
+
 
 		gambleList = PortfolioGenerator.generateGambles(GAMBLENUM, CLASSNUM);
 		linkedMatrix = PortfolioGenerator.genLinks(GAMBLENUM);
@@ -127,14 +127,14 @@ public class Controller extends JApplet {
 			Player gambler = new Player(i);
 			playerList.add(gambler);
 		}
-		
+
 		initTable();
-		
-		
+
+
 		String output = PortfolioGenerator.outputAsString(gambleList,
 				linkedMatrix);
 		assignClassType();
-		editorPane.setText(output);
+		//editorPane.setText(output);
 		ROUND = Integer.parseInt(roundField.getText());
 		currentRound = 0;
 		roundDigit.setText(String.valueOf(currentRound));
@@ -146,7 +146,7 @@ public class Controller extends JApplet {
 				slider.setValue(0);
 			}
 		}
-		
+
 		if(MODE == 2)
 		{
 			int changeTimes = ROUND/10;
@@ -156,19 +156,19 @@ public class Controller extends JApplet {
 				do{
 					round = (int)(Math.random()*ROUND);
 				}while(roundToChangeType.contains(round));
-				
+
 				roundToChangeType.add(round);	
 			}
 		}
-		
+
 		if (startButton.getText().equals("Start")) {
 			startButton.setText("Restart");
 		}
-		
+
 		showPanel.init();
 		loadHistogram(gambleList);
 		updateInfoTable();
-		
+
 
 	}
 
@@ -194,7 +194,7 @@ public class Controller extends JApplet {
 			classProp.put(classId, newType);
 		}
 	}
-	
+
 	/*
 	 * Generate gambles play order for one round
 	 */
@@ -222,7 +222,7 @@ public class Controller extends JApplet {
 		{
 			classTypeChange();
 		}
-		
+
 		genreateGambleOrder();
 
 		for (int i = 0; i < gambleOrder.size(); i++) {
@@ -286,10 +286,10 @@ public class Controller extends JApplet {
 		}
 
 		computeReturnForOneRound();
-		
+
 		updateHistogram(gambleList);
 		updateInfoTable();
-		
+
 		roundDigit.setText(String.valueOf(currentRound));
 
 		if (currentRound == ROUND) {
@@ -306,19 +306,19 @@ public class Controller extends JApplet {
 				result = "Winner is Player "+String.valueOf(winnerPlayer.getId()+1);
 				winner = "Player "+String.valueOf(winnerPlayer.getId()+1);
 			}
-		    String multiLineMsg[] = {title,result} ;
-		    JOptionPane.showMessageDialog(this, multiLineMsg);
+			String multiLineMsg[] = {title,result} ;
+			JOptionPane.showMessageDialog(this, multiLineMsg);
 		}
 	}
 
 	/*
 	 * Update info table each round 
 	 */
-	
+
 	public void updateInfoTable()
 	{
 		NumberFormat formatter = new DecimalFormat("####.##");
-		
+
 		if(MODE == 1)
 		{
 			for(int i=0;i<playerList.size();i++)
@@ -331,21 +331,21 @@ public class Controller extends JApplet {
 
 				infoTable.updateUI();
 			}
-			
+
 		}else
 		{
-		for(int i=0;i<playerList.size();i++)
-		{
-			Player  player = playerList.get(i);
-			String current = formatter.format(player.getWealth());
-			String previous = formatter.format(player.getPrevious());
-			String sharpe = formatter.format(player.getSharpeRatio());
-			dtm.setValueAt(current, i, 1);
-			dtm.setValueAt(previous, i, 2);
-			dtm.setValueAt(sharpe, i, 3);
+			for(int i=0;i<playerList.size();i++)
+			{
+				Player  player = playerList.get(i);
+				String current = formatter.format(player.getWealth());
+				String previous = formatter.format(player.getPrevious());
+				String sharpe = formatter.format(player.getSharpeRatio());
+				dtm.setValueAt(current, i, 1);
+				dtm.setValueAt(previous, i, 2);
+				dtm.setValueAt(sharpe, i, 3);
 
-			infoTable.updateUI();
-		}
+				infoTable.updateUI();
+			}
 		}
 	}
 	/*
@@ -354,27 +354,27 @@ public class Controller extends JApplet {
 	public Player getWinnerPlayer() {
 		Player winner = null;
 		double max = -1;
-		
+
 		if(MODE == 1)
 		{
 			if(playerList.get(0).getScore()==playerList.get(1).getScore())
 				return null;
-			
+
 			if(playerList.get(0).getScore() > playerList.get(1).getScore())
 				winner = playerList.get(0);
 			else
 				winner = playerList.get(1);
-			
+
 		}else
 		{
 			if(playerList.get(0).getWealth()==playerList.get(1).getWealth())
 				return null;
-			
+
 			if(playerList.get(0).getWealth() > playerList.get(1).getWealth())
 				winner = playerList.get(0);
 			else
 				winner = playerList.get(1);
-			
+
 			/*
 			for (int i = 0; i < playerCount; i++) {
 				Player player = playerList.get(i);
@@ -383,7 +383,7 @@ public class Controller extends JApplet {
 					winner = player;
 				}
 			}*/
-			
+
 		}
 
 		return winner;
@@ -413,7 +413,7 @@ public class Controller extends JApplet {
 			wealth = 1.0;
 		else
 			wealth = player.getWealth();
-		
+
 		List<Double> normalizeList = new ArrayList<Double>();
 		double sum = 0.0;
 		for (Integer amount : allocation) {
@@ -460,7 +460,7 @@ public class Controller extends JApplet {
 		return sum(outcome);
 	}
 
-	
+
 	/*
 	 * Compute returns for one round
 	 */
@@ -472,10 +472,10 @@ public class Controller extends JApplet {
 
 			List<Integer> allocList = getAllocation(player.getId());
 			List<Double> normalizeList = normalizeAllocation(player, allocList);
-			
+
 			if(MODE == 1)
 				player.setWealth(1.0);
-			
+
 			double cost = sum(normalizeList);
 			double yesterday = player.getWealth();
 			player.setPrevious(yesterday);
@@ -495,15 +495,15 @@ public class Controller extends JApplet {
 			{
 				gamblesReturn= (today - yesterday) / (today + yesterday)* 2;
 			}
-			
+
 			player.getReturns().add(gamblesReturn);
-			
+
 			if(MODE == 1 && gamblesReturn >= 1)
 				player.increaseScoreByOne();
-				
+
 			if(MODE == 2)
 				player.caculateSharpeRatio();
-			
+
 
 		}
 	}
@@ -525,11 +525,11 @@ public class Controller extends JApplet {
 	 * Update histogram each round
 	 */
 	public void updateHistogram(List<Gamble> gambleList) {
-		
+
 		for (Gamble p : gambleList) {
 			showPanel.update(String.valueOf(p.id), p.getLastResult());
 		}
-		
+
 		showPanel.updateUI();
 	}
 
@@ -547,14 +547,14 @@ public class Controller extends JApplet {
 				classProp.put(i, -1);
 		}
 	}
-	
-	
+
+
 	/*
 	 * Initialize info table
 	 */
 	public void initTable()
 	{
-		
+
 		NumberFormat formatter = new DecimalFormat("####.##");
 		if(MODE == 2)
 		{
@@ -588,10 +588,10 @@ public class Controller extends JApplet {
 				infoTable.updateUI();
 			}
 		}
-		
+
 	}
 
-	
+
 	/*
 	 * Initialize the GUI
 	 */
@@ -600,32 +600,32 @@ public class Controller extends JApplet {
 		GridBagConstraints c = new GridBagConstraints();
 		this.getContentPane().setSize(895, 600);
 		getContentPane().setLayout(new BorderLayout());
-		
+
 		leftPanel.setLayout(new BorderLayout());
 		leftPanel.setPreferredSize(new Dimension(300,600));
 		leftPanel.setBackground(Color.BLUE);
 		getContentPane().add(leftPanel,BorderLayout.WEST);
-		
+
 		operPanel.setPreferredSize(new Dimension(300,120));
 		leftPanel.add(operPanel,BorderLayout.NORTH);
-		
+
 		roundLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
 
-	    mode1Button.setSelected(true);
 
-	    group.add(mode1Button);
-	    group.add(mode2Button);
+		mode1Button.setSelected(true);
 
-	    
-	    operPanel.add(mode1Button);
-	    operPanel.add(mode2Button);
-	    operPanel.add(roundLabel);
+		group.add(mode1Button);
+		group.add(mode2Button);
+
+
+		operPanel.add(mode1Button);
+		operPanel.add(mode2Button);
+		operPanel.add(roundLabel);
 		operPanel.add(roundField);
 		operPanel.add(roundReminder);
 		operPanel.add(roundDigit);
-		operPanel.add(startButton);
-		operPanel.add(playButton);
+		//operPanel.add(startButton);
+		//operPanel.add(playButton);
 
 		roundField.setText("10");
 
@@ -646,44 +646,42 @@ public class Controller extends JApplet {
 				playARound();
 			}
 		});
-		
+
 		infoPanel.setPreferredSize(new Dimension(300,100));
 		leftPanel.add(infoPanel,BorderLayout.CENTER);
-		
+
 		for (int i = 0; i < playerCount; i++) {
 			Player gambler = new Player(i);
 			playerList.add(gambler);
 		}
-		
-		initTable();
-		
 
-		
+		initTable();
+
 		infoPanel.getViewport().add(infoTable);
 
-		gamblePanel.setPreferredSize(new Dimension(300,380));
+		//gamblePanel.setPreferredSize(new Dimension(300,380));
 
-		editorPane.setEditable(false);
-		editorPane
-				.setText("Gamble\n\nLink\n");
-		
-		gamblePanel.getViewport().add(editorPane);
-		leftPanel.add(gamblePanel,BorderLayout.SOUTH);
+		//editorPane.setEditable(false);
+		//editorPane
+		//.setText("Gamble\n\nLink\n");
+
+		//gamblePanel.getViewport().add(editorPane);
+		//leftPanel.add(gamblePanel,BorderLayout.SOUTH);
 
 		centerPanel.setPreferredSize(new Dimension(695,600));
 		centerPanel.setLayout(new BorderLayout());
 		getContentPane().add(centerPanel,BorderLayout.CENTER);
-		
-		showPanel.setPreferredSize(new Dimension(695,150));
-		barPanel.setPreferredSize(new Dimension(695,450));
-		
-		centerPanel.add(showPanel,BorderLayout.NORTH);
-		centerPanel.add(barPanel,BorderLayout.CENTER);
+
+		showPanel.setPreferredSize(new Dimension(695,600));
+		//barPanel.setPreferredSize(new Dimension(695,450));
+
+		centerPanel.add(showPanel,BorderLayout.CENTER);
+		//centerPanel.add(barPanel,BorderLayout.CENTER);
 
 		List<JSlider> sliderPlayer1 = new ArrayList<JSlider>();
 		List<JSlider> sliderPlayer2 = new ArrayList<JSlider>();
-		
-		
+
+
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
 		c.gridy = 0;
@@ -699,7 +697,7 @@ public class Controller extends JApplet {
 		c.gridheight = 1;
 		JLabel player2Label = new JLabel("P2", JLabel.CENTER);
 		barPanel.add(player2Label, c);
-	
+
 
 		for (int i = 0; i < GABMLE_NUM; i++) {
 
@@ -747,8 +745,26 @@ public class Controller extends JApplet {
 		allocMap.put(0, sliderPlayer1);
 		allocMap.put(1, sliderPlayer2);
 
-
-
 	}
-
+	
+	/**
+	 * Only two possibilites 1 ,2
+	 */
+	public void setMode(int mode){
+		
+		if(mode == 1){
+			mode1Button.setSelected(true);
+		}else{
+			mode2Button.setSelected(true);
+		}
+		
+	}
+	
+	public void setNumberOfRounds(int rounds){
+		roundField.setText(rounds+"");
+	}
+	
+	public void setCurrentRound(int round){
+		roundReminder.setText(round+"");
+	}
 }
