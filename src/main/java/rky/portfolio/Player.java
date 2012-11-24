@@ -6,6 +6,7 @@ public class Player
 {
     public final String name;
     
+    // TODO - Break this out into a time keeper class
     private long remainingTime = 120 * 1000; 
     private long lastActionStartTime;
     
