@@ -52,4 +52,21 @@ public class SetMap<K,V> {
 	public String toString() {
 		return contents.toString();
 	}
+	
+	/**
+	 * Takes a SetMap whose keys and values are of the same type, and returns one without reverse mappings (i.e. if there exists a mapping a -> b, there will not exist a mapping b -> a).
+	 * @param map
+	 * @return
+	 */
+	static public <T> SetMap<T, T> distinct(SetMap<T, T> map) {
+		SetMap<T, T> dist = new SetMap<T, T>();
+		for( Map.Entry<T, Set<T>> entry : map.contents.entrySet() ) {
+			T key = entry.getKey();
+			for( T val : entry.getValue() ) {
+				if( !dist.contains(val, key) )
+					dist.put(key, val);
+			}
+		}
+		return dist;
+	}
 }
