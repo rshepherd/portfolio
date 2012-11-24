@@ -92,12 +92,14 @@ public class Server
             try
             {
                 out.println(s);
+                return;
             }
             catch (Exception e)
             {
                 e.printStackTrace(System.err);
-                throw new RuntimeException("Unable to send message to client.");
             }
+            
+            throw new RuntimeException("Unable to send message to client.");
         }
 
         public String receive()

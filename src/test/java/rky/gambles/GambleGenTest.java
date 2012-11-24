@@ -9,13 +9,14 @@ import org.junit.Test;
 import rky.portfolio.gambles.Gamble;
 import rky.portfolio.gambles.Gambles;
 import rky.portfolio.gambles.Return;
+import rky.portfolio.io.FileManager;
 import rky.util.SetMap;
 
 public class GambleGenTest
 {
 	static final double AVERAGE_EXPECTED = 2.0;
 	
-	static final double HALF_PROBABILITY_OF_LINK = 0.4;
+	static final double HALF_PROBABILITY_OF_LINK = 0.2;
 	
 	@Test
 	public void generateGamblesTest()
@@ -58,8 +59,6 @@ public class GambleGenTest
 					));
 		}
 		
-		
-		
 		Map<Gamble, Integer> gambleIds = new HashMap<Gamble, Integer>();
 		
 		for( int i = 0; i < numGambles; i++ )
@@ -83,6 +82,7 @@ public class GambleGenTest
 			}
 		}
 		
+		System.out.println(FileManager.writeInputFile(gambles, links));		
 		
 	}
 }
