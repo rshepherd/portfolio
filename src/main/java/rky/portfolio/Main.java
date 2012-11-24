@@ -5,20 +5,13 @@ import java.util.Map;
 
 import rky.util.CommandLineUtils;
 
-
 public class Main
 {
 
     public static void main(String[] args)
     {
-        
-        
         Map<String,String> arguments = CommandLineUtils.simpleCommandLineParser(args);
         validate(arguments);
-        
-        
-        //IoManager io = new IoManager(port);
-        //io.connect(numPlayers);
     }
     
     private static void validate(Map<String, String> args)
