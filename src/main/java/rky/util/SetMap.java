@@ -48,4 +48,8 @@ public class SetMap<K,V> {
 			return false;
 		return get(key).remove(value);
 	}
+	
+	public String toString() {
+		return contents.toString();
+	}
 }
