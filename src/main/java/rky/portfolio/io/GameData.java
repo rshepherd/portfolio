@@ -49,7 +49,7 @@ public class GameData
         
         private Integer makeKey(Integer round, Integer classId)
         {
-            return (round.toString() + classId.toString()).hashCode();
+            return (round.toString() +","+ classId.toString()).hashCode();
         }
     }
     
