@@ -3,7 +3,8 @@ SERVER
 
 To run the server, use a command like the following:
 
-java -jar portfolio-1.0.0.jar -p 54321 -n 5 -m 2 -c /favorability/file.txt -g false -f /gambles/file.txt
+#java -jar portfolio-1.0.0.jar -p 54321 -n 5 -m 2 -c /favorability/file.txt -g false -f /gambles/file.txt
+java -jar portfolio-1.0.0.jar -p 54321 -n 1 -m mode-1 -c ../src/main/resources/favorability.txt
 
  -p The port number to listen on.
  -n The number of expected players.
