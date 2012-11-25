@@ -17,9 +17,11 @@ public class Player {
 	private double variance;
 	private double previous;
 	private double sharpeRatio;
+	private String teamName;
 	
-	Player(int id){
+	Player(int id,String name){
 		this.id = id;
+		this.teamName = name;
 		this.wealth = 10;
 		this.previous = 10;
 		this.cheated = false;
@@ -142,5 +144,14 @@ public class Player {
 	public void setPrevious(double previous) {
 		this.previous = previous;
 	}
+
+	public String getTeamName() {
+		return teamName;
+	}
+
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+	
 
 }

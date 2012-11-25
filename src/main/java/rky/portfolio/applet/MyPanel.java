@@ -58,7 +58,7 @@ class MyPanel extends JPanel {
 	}
 
 	public void drawHistogram(Graphics g) {
-		
+
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("SANS_SERIF", Font.PLAIN, 15));
 		g.drawString("Gambles Return", SIZE + 200, 30);
@@ -78,16 +78,16 @@ class MyPanel extends JPanel {
 		int[] y2 = { this.getHeight() - SIZE - 6, this.getHeight() - SIZE,
 				this.getHeight() - SIZE + 6 };
 		g.drawPolyline(x2, y2, 3);
-		
+
 		if(value.size() == 0)
 			return;
 		// title
-		
-		/*
+
+
 		g.drawString(this.yTitle, SIZE - 20, SIZE - 6);
-		g.drawString(this.xTitle, this.getWidth() - SIZE - 20, this.getHeight()
+		g.drawString(this.xTitle, this.getWidth() - SIZE - 40, this.getHeight()
 				- SIZE + 20);
-		*/
+
 
 		// compute width
 		int wigth = (int) ((this.getWidth() - 3 * SIZE) / (value.size() * 2));
@@ -100,7 +100,7 @@ class MyPanel extends JPanel {
 		}
 
 		double num = (double) (this.getHeight() - 2 * (SIZE + 10))
-				/ (double) (1.2 * (max + 0.001));
+		/ (double) (1.2 * (max + 0.001));
 
 		for (int i = 0; i < elem.size(); i++) {
 			int height = (int) (value.get(i) * num);
@@ -111,11 +111,13 @@ class MyPanel extends JPanel {
 					- height, wigth, height);
 			g.setColor(Color.RED);
 
-			g.drawString(df.format(value.get(i)), wigth * (i * 2 + 1) + SIZE,
-					this.getHeight() - SIZE - 10 - height);
+			//			g.drawString(df.format(value.get(i)), wigth * (i * 2 + 1) + SIZE,
+			//					this.getHeight() - SIZE - 10 - height);
 
-			g.drawString(elem.get(i), wigth * (i * 2 + 1) + SIZE,
-					this.getHeight() - SIZE + 15);
+			if(i%10 == 0){
+				g.drawString(elem.get(i), wigth * (i * 2 + 1) + SIZE,
+						this.getHeight() - SIZE + 15);
+			}
 
 		}
 	}

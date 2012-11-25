@@ -26,7 +26,7 @@ public class PortfolioGenerator {
 			gamblesList.add(gamble);
 		}
 		return gamblesList;
-	}
+	}	
 
 	public static Gamble generate(int id,int classNum, double expectedReturn) throws Exception {
 		Gamble gamble = new Gamble();

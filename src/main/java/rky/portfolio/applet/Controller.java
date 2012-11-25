@@ -70,7 +70,7 @@ public class Controller extends JApplet {
 	public static int playerCount = 2;
 	public static int ROUND = 10;
 	public static HashMap<Integer, Integer> classProp = new HashMap<Integer, Integer>();
-	public static int GAMBLENUM = 10;
+	public static int GAMBLENUM = 200;
 	public static int CLASSNUM = 5;
 	public static int MODE = 1;
 
@@ -86,6 +86,7 @@ public class Controller extends JApplet {
 	private List<Integer> roundToChangeType = new ArrayList<Integer>();
 	private DefaultTableModel dtm;
 
+	private final int WIDTH = 1195;
 
 	public String getWinner()
 	{
@@ -98,7 +99,7 @@ public class Controller extends JApplet {
 		// creating this applet's GUI.
 		try {
 
-			this.setSize(895, 600);
+			this.setSize(WIDTH, 600);
 			javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					createGUI();
@@ -124,7 +125,7 @@ public class Controller extends JApplet {
 		linkedMatrix = PortfolioGenerator.genLinks(GAMBLENUM);
 		playerList.clear();
 		for (int i = 0; i < playerCount; i++) {
-			Player gambler = new Player(i);
+			Player gambler = new Player(i,"????");
 			playerList.add(gambler);
 		}
 
@@ -326,6 +327,8 @@ public class Controller extends JApplet {
 				Player  player = playerList.get(i);
 				String score = formatter.format(player.getScore());
 				String PNL = formatter.format(player.getPNL());
+				String teamName = playerList.get(i).getTeamName();
+				dtm.setValueAt(teamName, i, 0);
 				dtm.setValueAt(score, i, 1);
 				dtm.setValueAt(PNL, i, 2);
 
@@ -340,6 +343,7 @@ public class Controller extends JApplet {
 				String current = formatter.format(player.getWealth());
 				String previous = formatter.format(player.getPrevious());
 				String sharpe = formatter.format(player.getSharpeRatio());
+				dtm.setValueAt(playerList.get(i).getTeamName(), i, 0);
 				dtm.setValueAt(current, i, 1);
 				dtm.setValueAt(previous, i, 2);
 				dtm.setValueAt(sharpe, i, 3);
@@ -557,14 +561,15 @@ public class Controller extends JApplet {
 
 		NumberFormat formatter = new DecimalFormat("####.##");
 		if(MODE == 2)
-		{
+		{			
+			
 			String [] coloumTitle = {"Player","Current","Previous","Sharpe Ratio"};
 			dtm = new DefaultTableModel(coloumTitle,0);
 			infoTable.setModel(dtm);
 			for(int i=0;i<playerList.size();i++)
 			{
 				Player  player = playerList.get(i);
-				String name = "Player "+String.valueOf(player.getId()+1);
+				String name = player.getTeamName();
 				String current = formatter.format(player.getWealth());
 				String previous = formatter.format(player.getPrevious());
 				String sharpe = formatter.format(player.getSharpeRatio());
@@ -580,7 +585,7 @@ public class Controller extends JApplet {
 			for(int i=0;i<playerList.size();i++)
 			{
 				Player  player = playerList.get(i);
-				String name = "Player "+String.valueOf(player.getId()+1);
+				String name = player.getTeamName();
 				String score = formatter.format(player.getScore());
 				String pnl = formatter.format(player.getPNL());
 				String [] cols = {name,score,pnl};
@@ -598,7 +603,7 @@ public class Controller extends JApplet {
 	private void createGUI() {
 
 		GridBagConstraints c = new GridBagConstraints();
-		this.getContentPane().setSize(895, 600);
+		this.getContentPane().setSize(WIDTH, 600);
 		getContentPane().setLayout(new BorderLayout());
 
 		leftPanel.setLayout(new BorderLayout());
@@ -650,11 +655,11 @@ public class Controller extends JApplet {
 		infoPanel.setPreferredSize(new Dimension(300,100));
 		leftPanel.add(infoPanel,BorderLayout.CENTER);
 
-		for (int i = 0; i < playerCount; i++) {
-			Player gambler = new Player(i);
-			playerList.add(gambler);
-		}
-
+//		for (int i = 0; i < playerCount; i++) {
+//			Player gambler = new Player(i);
+//			playerList.add(gambler);
+//		}
+//
 		initTable();
 
 		infoPanel.getViewport().add(infoTable);
@@ -745,6 +750,7 @@ public class Controller extends JApplet {
 		allocMap.put(0, sliderPlayer1);
 		allocMap.put(1, sliderPlayer2);
 
+		testWithDummyData();
 	}
 	
 	/**
@@ -765,6 +771,49 @@ public class Controller extends JApplet {
 	}
 	
 	public void setCurrentRound(int round){
-		roundReminder.setText(round+"");
+		roundDigit.setText(round+"");
+	}
+	
+	public void setPlayers(List<rky.portfolio.Player> players){
+		
+		for (int i = 0; i < playerCount; i++) {
+			Player gambler = new Player(i,players.get(i).name);
+			playerList.add(gambler);
+		}
+
+		initTable();
+	}
+	
+	public void testWithDummyData(){
+		
+		setMode(1);
+		setNumberOfRounds(200);
+		setCurrentRound(10);
+				
+		//List of players
+		List<rky.portfolio.Player> players = new ArrayList<rky.portfolio.Player>();
+		players.add(new rky.portfolio.Player("rky"));
+		players.add(new rky.portfolio.Player("anyName"));
+		setPlayers(players);
+		
+		try {
+			List<Gamble> gambleList = PortfolioGenerator.generateGambles(GAMBLENUM, CLASSNUM);
+			
+			for(Gamble g: gambleList){
+				g.play();
+			}
+			
+			
+			loadHistogram(gambleList);
+			updateHistogram(gambleList);
+
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+
 	}
 }
