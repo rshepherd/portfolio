@@ -62,7 +62,5 @@ public class Player
     public static class Players extends HashSet<Player>
     {
         private static final long serialVersionUID = 1L;
-        
-        // Map<Player, Message> sendAll(Map<Player, Message>)
     }
 }
