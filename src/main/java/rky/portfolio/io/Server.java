@@ -30,7 +30,7 @@ public class Server
         }
     }
 
-    public Players start(int numPlayers)
+    public Players start(int numPlayers, IoManager io)
     {
         Players players = new Players();
         
@@ -40,7 +40,7 @@ public class Server
             {
                 Socket p1Socket = serverSocket.accept();
                 Client c = new Client(p1Socket);
-                Player p = new Player(c.receive());
+                Player p = new Player(c.receive(), io);
                 clients.put(p, c);
                 players.add(p);
                 System.out.println(p.name + " connected as player " + i);

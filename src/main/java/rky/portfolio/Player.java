@@ -2,38 +2,76 @@ package rky.portfolio;
 
 import java.util.HashSet;
 
+import rky.portfolio.io.IoManager;
+import rky.portfolio.io.Message;
+
 public class Player
 {
     public final String name;
     
-    // TODO - Break this out into a time keeper class
+    private final IoManager io;
     private long remainingTime = 120 * 1000; 
     private long lastActionStartTime;
     
-    public Player(String name)
+    public Player(String name, IoManager io)
     {
         this.name = name;
+        this.io = io;
     }
     
-    public void startTimer()
+    public void send(Message m)
     {
-        lastActionStartTime = System.currentTimeMillis();
+        io.send(this, m);
     }
-
-    public boolean pauseTimer()
+    
+    public Message recieve()
     {
-        long elapsed = System.currentTimeMillis() - lastActionStartTime;
-        return (remainingTime -= elapsed) >= 0;
+        return io.receive(this);
+    }
+    
+    public Message prompt(Message m)
+    {
+        startTimer();
+        io.send(this, m);
+        Message response = io.receive(this);
+        if (pauseTimer())
+        {
+            return response;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    public long remainingTime()
+    {
+        return remainingTime;
     }
     
     @Override
     public String toString()
     {
-        return "Player [name=" + name + "]";
+        return "Player [name=" + name + ", remainingTime=" + remainingTime + "]";
     }
+
+    private void startTimer()
+    {
+        lastActionStartTime = System.currentTimeMillis();
+    }
+
+    private boolean pauseTimer()
+    {
+        long elapsed = System.currentTimeMillis() - lastActionStartTime;
+        return (remainingTime -= elapsed) >= 0;
+    }
+    
+    
 
     public static class Players extends HashSet<Player>
     {
         private static final long serialVersionUID = 1L;
+        
+        // Map<Player, Message> sendAll(Map<Player, Message>)
     }
 }

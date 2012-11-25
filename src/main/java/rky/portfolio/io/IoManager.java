@@ -17,7 +17,7 @@ public class IoManager
 
     public Players connect(int numPlayers)
     {
-        return server.start(numPlayers);
+        return server.start(numPlayers, this);
     }
 
     public void send(Player p, Message m)
