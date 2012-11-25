@@ -92,7 +92,6 @@ public class GameLoop implements Runnable
 				disqualifyPlayer( player );
 			
 			Map<Gamble, Return> gambleReturns = playGambles();
-			System.out.println( "Gamble returns: " + gambleReturns );
 			
 			StringBuilder gambleReturnsStringBuilder = new StringBuilder("[");
 			for( Integer gambleId : gambles.keySet() )
@@ -116,8 +115,6 @@ public class GameLoop implements Runnable
 				
 				player.send( new Message(gambleReturnsString) );
 			}
-			
-			System.out.println( scoreBoard );
 		}
 	}
 	
@@ -128,8 +125,6 @@ public class GameLoop implements Runnable
 
 	private void disqualifyPlayer(Player player)
 	{
-		// TODO Auto-generated method stub
-		
 		disqualifiedPlayers.add( player );
 	}
 	
