@@ -57,7 +57,7 @@ public class GameLoop implements Runnable
 		
 		for( Gamble g : gamblesInOrder )
 		{
-			Luck classLuck = classes.get( 0 /*round*/, gambleClasses.get(g) /*class id*/);
+			Luck classLuck = classes.get( currentTurn /*round*/, gambleClasses.get(g) /*class id*/);
 			Return ret = Gambles.playGamble( g, classLuck, played, links.get(g) );
 			played.put( g, ret );
 		}
@@ -159,7 +159,18 @@ public class GameLoop implements Runnable
 	private Map<Integer, Double> getPlayerMoneyDistribution(Player player)
 	{
 		// TODO Auto-generated method stub
-		return new HashMap<Integer, Double>();
+		Map<Integer, Double> distribMap = new HashMap<Integer, Double>();
+		
+		// TODO: remove this test code
+		double distribute = Math.random();
+		for( Integer gId : gambles.keySet() ) {
+			if( Math.random() > 0.7 ) {
+				double val = distribute * Math.random();
+				distribute -= val;
+				distribMap.put(gId, val);
+			}
+		}
+		return distribMap;
 	}
 
 	// sends the request to player (the amount of money he has, or what not)
