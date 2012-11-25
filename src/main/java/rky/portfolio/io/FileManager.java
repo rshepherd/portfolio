@@ -3,6 +3,7 @@ package rky.portfolio.io;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -64,6 +65,14 @@ public class FileManager
         }
     }
     
+    // For game mode 1
+    public static GameData readGameData(String clientInputFile)
+    {   
+        String classFavoribilityFile = new Object().getClass().getClassLoader().getResource("favorability.txt").getFile();
+        return readGameData(clientInputFile, classFavoribilityFile);
+    }
+    
+    // For game mode 2
     public static GameData readGameData(String clientInputFile, String classFavoribilityFile)
     {
         GameData gd = new GameData();

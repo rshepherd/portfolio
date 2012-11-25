@@ -18,7 +18,7 @@ public class Main
     {
         try
         {
-            if (args.size() < 4 || args.size() > 6) 
+            if (args.size() < 3 || args.size() > 6) 
             {
                 throw new Exception("Invalid number of arguments.");
             }
@@ -44,13 +44,6 @@ public class Main
                 throw new Exception("Invalid game mode. Accepted values are 1 or 2.");
             }
             
-            // class favorability file (provided by shasha)
-            String c = args.get(args.get("-c"));
-            if (c == null || !(new File(c).isFile()))
-            {
-                throw new Exception("Invalid class favorability file specified. Maybe use absolute an path?");
-            }
-
             // gui
             String g = args.get(args.get("-g"));
             if (g == null)
@@ -64,9 +57,16 @@ public class Main
 
             // optional client input file (gambles and links)
             String f = args.get(args.get("-f"));
-            if (f == null || !(new File(f).isFile()))
+            if (f != null && !(new File(f).isFile()))
             {
                 throw new Exception("Invalid client input file specified. Maybe use absolute an path? (Or omit for a new random file.)");
+            }
+            
+            // class favorability file 
+            String c = args.get(args.get("-c"));
+            if (c != null && !(new File(c).isFile()))
+            {
+                throw new Exception("Invalid class favorability file specified. Maybe use absolute an path? (Or omit for the standard file.)");
             }
         }
         catch (Exception e)
@@ -82,7 +82,7 @@ public class Main
         System.err.println("\t -p The port number to listen on.");
         System.err.println("\t -n The number of expected players.");
         System.err.println("\t -m The game mode. Accepted values are 1 or 2.");
-        System.err.println("\t -c The class favorability file as specified by Prof. Shasha. ex http://cs.nyu.edu/courses/Fall12/CSCI-GA.2965-001/portattformat");
+        System.err.println("\t -c Optional. For game mode 2. The class favorability file as specified by Prof. Shasha. ex http://cs.nyu.edu/courses/Fall12/CSCI-GA.2965-001/portattformat");
         System.err.println("\t -g Optional. Display the gui? Accepted values are true or false. Defaults to false.");
         System.err.println("\t -f Optional. Use this file of gambles and links. If absent a new file is generated. ");
         System.err.println("\nex: java -jar portfolio-1.0.0.jar -p 54321 -n 5 -m 2 -c /favorability/file.txt -g false -f /gambles/file.txt ");
