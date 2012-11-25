@@ -61,6 +61,7 @@ public class Main
         
         new GameLoop( gameData, players, getModeEnum(mode) ).run();
         
+        // Send game over message
         for (Player p : players)
         {
             p.send(Message.createGameOver(Math.random()));
