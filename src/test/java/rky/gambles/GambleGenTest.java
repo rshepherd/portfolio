@@ -15,7 +15,7 @@ public class GambleGenTest
 {
 	static final double AVERAGE_EXPECTED = 2.0;
 	
-	static final double HALF_PROBABILITY_OF_LINK = 0.2;
+	static final double HALF_PROBABILITY_OF_LINK = 0.4;
 	
 	@Test
 	public void generateGamblesTest()
