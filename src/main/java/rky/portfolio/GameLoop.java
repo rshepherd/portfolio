@@ -5,59 +5,45 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import rky.portfolio.gambles.Gamble;
 import rky.portfolio.gambles.Gambles;
 import rky.portfolio.gambles.Luck;
 import rky.portfolio.gambles.Return;
+import rky.portfolio.io.FileManager.GameData;
 import rky.util.SetMap;
 
-public class GameLoop
+public class GameLoop implements Runnable
 {
-	Map<Integer, Gamble>   gambles       = new HashMap<Integer, Gamble>();
-	Map<Gamble, Integer>   ids           = new HashMap<Gamble, Integer>();
-	SetMap<Gamble, Gamble> links         = new SetMap<Gamble, Gamble>();
-	Map<Integer, Luck>     classes       = new HashMap<Integer, Luck>();
-	Map<Gamble, Integer>   gambleClasses = new HashMap<Gamble, Integer>();
+	static final double PRECISION = 0.00001;
 	
-	public Map<Integer, Gamble> getGambles() {
-		return gambles;
-	}
+	final Map<Integer, Gamble>   gambles;
+	final Map<Gamble, Integer>   ids;
+	final SetMap<Gamble, Gamble> links;
+	final Map<Integer, Luck>     classes;
+	final Map<Gamble, Integer>   gambleClasses;
+	final Set<Player>            players;
+	
+	final Map<Player, String> playerErrors = new HashMap<Player, String>();
 
-	public void setGambles(Map<Integer, Gamble> gambles) {
-		this.gambles = gambles;
-	}
-
-	public Map<Gamble, Integer> getIds() {
-		return ids;
-	}
-
-	public void setIds(Map<Gamble, Integer> ids) {
-		this.ids = ids;
-	}
-
-	public SetMap<Gamble, Gamble> getLinks() {
-		return links;
-	}
-
-	public void setLinks(SetMap<Gamble, Gamble> links) {
-		this.links = links;
-	}
-
-	public Map<Integer, Luck> getClasses() {
-		return classes;
-	}
-
-	public void setClasses(Map<Integer, Luck> classes) {
-		this.classes = classes;
-	}
-
-	public Map<Gamble, Integer> getGambleClasses() {
-		return gambleClasses;
-	}
-
-	public void setGambleClasses(Map<Gamble, Integer> gambleClasses) {
-		this.gambleClasses = gambleClasses;
+	final ScoreBoard.GameMode gameMode;
+	final ScoreBoard scoreBoard;
+	final int numberOfTurns;
+	int currentTurn;
+	
+	public GameLoop( GameData gameData, Set<Player> players, ScoreBoard.GameMode gameMode, int numberOfTurns )
+	{
+		this.gambles       = gameData.gambles;
+		this.ids           = gameData.ids;
+		this.links         = gameData.links;
+		this.classes       = gameData.classes;
+		this.gambleClasses = gameData.gambleClasses;
+		this.players       = players;
+		this.numberOfTurns = numberOfTurns;
+		this.gameMode      = gameMode;
+		
+		scoreBoard = new ScoreBoard(gameMode, numberOfTurns, players);
 	}
 	
 	/**
@@ -88,5 +74,102 @@ public class GameLoop
 		Collections.shuffle(gambleOrder);
 		return playGambles(gambleOrder);
 	}
-	
+
+	public void run()
+	{
+		
+		for( currentTurn = 0; currentTurn < numberOfTurns; currentTurn++ )
+		{	
+			// mapping for each player of their money distributions
+			Map<Player, Map<Integer, Double>> playerMoneyDistributions = getDistributionsFromPlayers();
+			
+			for( Player player : playerErrors.keySet() )
+				disqualifyPlayer( player );
+			
+			Map<Gamble, Return> gambleReturns = playGambles();
+			
+			for( Player player : playerMoneyDistributions.keySet() )
+			{
+				double profit = computeProfit( gambleReturns, playerMoneyDistributions.get(player) );
+				scoreBoard.add( currentTurn, player, profit );
+			}
+		}
+	}
+
+	private void disqualifyPlayer(Player player) {
+		// TODO Auto-generated method stub
+		
+		throw new RuntimeException(player + " broke something");
+	}
+
+	private double computeProfit(Map<Gamble, Return> gambleReturns, Map<Integer, Double> investments)
+	{
+		double profit = 0;
+		for( Integer gambleId : investments.keySet() )
+		{
+			Gamble g = gambles.get( gambleId );
+			profit += g.getV( gambleReturns.get(g) ) * investments.get(gambleId);
+		}
+		return profit;
+	}
+
+	private Map<Player, Map<Integer, Double>> getDistributionsFromPlayers()
+	{
+		playerErrors.clear();
+		
+		Map<Player, Map<Integer, Double>> distributions = new HashMap<Player, Map<Integer, Double>>();
+		// first send the requests to all
+		for( Player player : players )
+		{
+			sendDistributionRequest(player);
+		}
+		for( Player player : players )
+		{
+			Map<Integer, Double> moneyDistrib = getPlayerMoneyDistribution(player);
+			if( ! isValidMoneyDistribution(moneyDistrib) )
+				playerErrors.put( player, "Submitted an invalid money distribution" );
+			else
+				distributions.put( player, moneyDistrib );
+		}
+		return distributions;
+	}
+
+	private boolean isValidMoneyDistribution(Map<Integer, Double> moneyDistrib)
+	{
+		boolean valid = true;
+		
+		double sum = 0;
+		for( Integer gambleId : moneyDistrib.keySet() )
+		{
+			if( !gambles.containsKey(gambleId) ) {
+				valid = false;
+				break;
+			}
+			
+			sum += moneyDistrib.get(gambleId);
+		}
+		if( sum > 1.0 + PRECISION )
+			valid = false;
+		
+		return valid;
+	}
+
+	// receives the distribution from the client
+	private Map<Integer, Double> getPlayerMoneyDistribution(Player player)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// sends the request to player (the amount of money he has, or what not)
+	private void sendDistributionRequest(Player player)
+	{
+		if( gameMode == ScoreBoard.GameMode.mode1 ) {
+			// TODO send the player starting value 1.0
+		}
+		else {
+			double currentBudget = scoreBoard.getBudget(currentTurn, player);
+			// TODO send the player starting value "currentBudget"
+		}
+	}
 }
