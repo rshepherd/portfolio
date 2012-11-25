@@ -19,7 +19,7 @@ public class Main
     
     public static void main(String[] args)
     {
-        // Parse and validate cl params
+        // Parse and validate arguments
         Map<String,String> argMap = CommandLineUtils.simpleCommandLineParser(args);
         validate(argMap);
         
@@ -58,12 +58,15 @@ public class Main
             p.send(init);
         }
         
-        new GameLoop( gameData, players, getModeEnum(mode) ).run();
+        // Run game
+        GameLoop loop = new GameLoop( gameData, players, getModeEnum(mode) );
+        loop.run();
+        ScoreBoard scores = loop.getScoreBoard();
         
         // Send game over message
         for (Player p : players)
         {
-            p.send(Message.createGameOver(Math.random()));
+            p.send(Message.createGameOver(scores.getFinalScore(p)));
         }
     }
 

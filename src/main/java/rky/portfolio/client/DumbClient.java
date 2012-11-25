@@ -8,8 +8,6 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-import rky.portfolio.Player;
-
 public class DumbClient
 {
     private static Socket         socket;
@@ -111,6 +109,4 @@ public class DumbClient
         return gambleReturnsStringBuilder.toString();
     }
     
-    
-
 }
