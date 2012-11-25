@@ -21,7 +21,6 @@ public class FileManager
     private static final String GAMBLES_HEADER = "# gamble_id, class_id, h_ret, h_prob, m_ret, m_prob, l_ret, l_prob\n";
     private static final String LINKS_HEADER = "# gi, gj\n";
     
-    // TODO - Take a map of gambles to classes Map<Gamble, Integer> gambleClasses,
     public static String writeInputFile(List<Gamble> gambles, SetMap<Integer, Integer> links) 
     {
         try

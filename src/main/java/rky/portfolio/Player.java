@@ -10,7 +10,7 @@ public class Player
     public final String name;
     
     private final IoManager io;
-    private long remainingTime = 120 * 1000; 
+    private int remainingTime = 120 * 1000; 
     private long lastActionStartTime;
     
     public Player(String name, IoManager io)
@@ -33,15 +33,8 @@ public class Player
     {
         startTimer();
         io.send(this, m);
-        Message response = io.receive(this);
-        if (pauseTimer())
-        {
-            return response;
-        }
-        else
-        {
-            return null;
-        }
+        Message response = io.receive(this, remainingTime);
+        return pauseTimer() ? response : null;
     }
     
     public long remainingTime()
@@ -65,8 +58,6 @@ public class Player
         long elapsed = System.currentTimeMillis() - lastActionStartTime;
         return (remainingTime -= elapsed) >= 0;
     }
-    
-    
 
     public static class Players extends HashSet<Player>
     {
