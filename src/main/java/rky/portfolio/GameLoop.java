@@ -94,6 +94,8 @@ public class GameLoop implements Runnable
 				scoreBoard.add( currentTurn, player, profit );
 			}
 		}
+		
+		
 	}
 
 	private void disqualifyPlayer(Player player) {
@@ -158,18 +160,13 @@ public class GameLoop implements Runnable
 	private Map<Integer, Double> getPlayerMoneyDistribution(Player player)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		return new HashMap<Integer, Double>();
 	}
 
 	// sends the request to player (the amount of money he has, or what not)
 	private void sendDistributionRequest(Player player)
 	{
-		if( gameMode == ScoreBoard.GameMode.mode1 ) {
-			// TODO send the player starting value 1.0
-		}
-		else {
-			double currentBudget = scoreBoard.getBudget(currentTurn, player);
-			// TODO send the player starting value "currentBudget"
-		}
+		double currentBudget = scoreBoard.getStartBudget(currentTurn, player, gameMode);
+		// TODO send the player starting value "currentBudget"
 	}
 }

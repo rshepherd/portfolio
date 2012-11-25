@@ -57,4 +57,12 @@ public class ScoreBoard
 	{
 		return budgets.get(turnNumber).get(player).startBudget;
 	}
+	
+	public double getStartBudget( int turnNumber, Player player, GameMode mode )
+	{
+		if( mode == GameMode.mode1 )
+			return 1.0;
+		
+		return getBudget( turnNumber, player );
+	}
 }
