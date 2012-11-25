@@ -32,7 +32,7 @@ public class GameData
         public Luck get(Integer round, Integer classId)
         {
             Luck l = map.get(makeKey(round, classId));
-            // Based on the data, this is has max iterations of ~20
+            
             while (l == null && round >= 0)
             {
                 round -= 1;
