@@ -24,7 +24,7 @@ public class Player
         io.send(this, m);
     }
     
-    public Message recieve()
+    public Message receive()
     {
         return io.receive(this);
     }
