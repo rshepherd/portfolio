@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
 import rky.portfolio.gambles.Gamble;
 import rky.portfolio.gambles.Luck;
@@ -21,7 +21,8 @@ public class FileManager
     private static final String GAMBLES_HEADER = "# gamble_id, class_id, h_ret, h_prob, m_ret, m_prob, l_ret, l_prob\n";
     private static final String LINKS_HEADER = "# gi, gj\n";
     
-    public static String writeInputFile(List<Gamble> gambles, Map<Gamble, Integer> gambleClasses, SetMap<Integer, Integer> links) 
+    // TODO - Take a map of gambles to classes Map<Gamble, Integer> gambleClasses,
+    public static String writeInputFile(List<Gamble> gambles, SetMap<Integer, Integer> links) 
     {
         try
         {
@@ -36,7 +37,7 @@ public class FileManager
                 Gamble g = gambles.get(i);
                 bw.write(String.format(
                         "%d, %d, %f, %f, %f, %f, %f \n",
-                        i, gambleClasses.get(g),
+                        i, new Random().nextInt() % 16,
                         g.getV(Return.high  ), g.getP(Return.high),
                         g.getV(Return.medium), g.getP(Return.medium),
                         g.getV(Return.low   ), g.getP(Return.low)

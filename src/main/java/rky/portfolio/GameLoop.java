@@ -33,7 +33,7 @@ public class GameLoop implements Runnable
 	final int numberOfTurns;
 	int currentTurn;
 	
-	public GameLoop( GameData gameData, Set<Player> players, ScoreBoard.GameMode gameMode, int numberOfTurns )
+	public GameLoop( GameData gameData, Set<Player> players, ScoreBoard.GameMode gameMode )
 	{
 		this.gambles       = gameData.gambles;
 		this.ids           = gameData.ids;
@@ -41,7 +41,7 @@ public class GameLoop implements Runnable
 		this.classes       = gameData.classFavorability;
 		this.gambleClasses = gameData.gambleClasses;
 		this.players       = players;
-		this.numberOfTurns = numberOfTurns;
+		this.numberOfTurns = gameMode == ScoreBoard.GameMode.mode1 ? 5 : 200;
 		this.gameMode      = gameMode;
 		
 		scoreBoard = new ScoreBoard(gameMode, numberOfTurns, players);

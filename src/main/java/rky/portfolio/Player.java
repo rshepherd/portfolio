@@ -1,6 +1,6 @@
 package rky.portfolio;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Player
 {
@@ -32,7 +32,7 @@ public class Player
         return "Player [name=" + name + "]";
     }
 
-    public static class Players extends ArrayList<Player>
+    public static class Players extends HashSet<Player>
     {
         private static final long serialVersionUID = 1L;
     }

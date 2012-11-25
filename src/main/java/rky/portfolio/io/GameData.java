@@ -18,7 +18,7 @@ public class GameData
     public final Map<Gamble, Integer>   gambleClasses    = new HashMap<Gamble, Integer>();
     // Gamble links
     public final SetMap<Gamble, Gamble> links            = new SetMap<Gamble, Gamble>();
-    // Class favorability as defined per round in the file provided by shasha
+    // Class favorability as defined per round in the file provided by shasha (or our default file)
     public final ClassFavorabilityMap   classFavorability = new ClassFavorabilityMap();
 
     public static class ClassFavorabilityMap
