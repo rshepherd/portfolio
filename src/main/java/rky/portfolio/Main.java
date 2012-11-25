@@ -24,28 +24,28 @@ public class Main
             }
             
             // port
-            String p = args.get(args.get("-p"));
+            String p = args.get("-p");
             if (p == null || !p.matches("[\\d]+"))
             {
                 throw new Exception("Invalid port.");
             }
 
             // num players
-            String n = args.get(args.get("-n"));
+            String n = args.get("-n");
             if (n == null || !n.matches("[\\d]+"))
             {
                 throw new Exception("Invalid number of expected players.");
             }
 
             // game mode
-            String m = args.get(args.get("-m"));
+            String m = args.get("-m");
             if (m == null || (!m.equals("1") && !m.equals("2")))
             {
                 throw new Exception("Invalid game mode. Accepted values are 1 or 2.");
             }
             
             // gui
-            String g = args.get(args.get("-g"));
+            String g = args.get("-g");
             if (g == null)
             {
                 args.put("-g", "false");
@@ -56,14 +56,14 @@ public class Main
             }
 
             // optional client input file (gambles and links)
-            String f = args.get(args.get("-f"));
+            String f = args.get("-f");
             if (f != null && !(new File(f).isFile()))
             {
                 throw new Exception("Invalid client input file specified. Maybe use absolute an path? (Or omit for a new random file.)");
             }
             
             // class favorability file 
-            String c = args.get(args.get("-c"));
+            String c = args.get("-c");
             if (c != null && !(new File(c).isFile()))
             {
                 throw new Exception("Invalid class favorability file specified. Maybe use absolute an path? (Or omit for the standard file.)");
