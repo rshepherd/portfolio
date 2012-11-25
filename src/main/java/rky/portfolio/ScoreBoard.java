@@ -51,6 +51,17 @@ public class ScoreBoard
 		}
 	}
 	
+	public double getFinalScore( Player player )
+	{
+		double mostRecentScore = Double.NEGATIVE_INFINITY;
+		for( Map<Player, BoardCell> map : budgets )
+		{
+			if( map.containsKey(player) )
+				mostRecentScore = map.get(player).startBudget;
+		}
+		return mostRecentScore;
+	}
+	
 	public void add( int turnNumber, Player player, double profit )
 	{
 		BoardCell cell = budgets.get(turnNumber).get(player);
