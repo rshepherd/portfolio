@@ -60,6 +60,11 @@ public class Main
         }
         
         new GameLoop( gameData, players, getModeEnum(mode) ).run();
+        
+        for (Player p : players)
+        {
+            p.send(Message.createGameOver(Math.random()));
+        }
     }
 
     private static void validate(Map<String, String> args)
