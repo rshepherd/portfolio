@@ -84,6 +84,9 @@ public class FileManager
             String line;
             while ((line = br.readLine()) != null)
             {
+            	if( line.length() == 0 || line.charAt(0) == '#')
+            		continue;
+            	
                 if (line.contains(GAMBLES_HEADER))
                 {
                     continue;
@@ -96,15 +99,19 @@ public class FileManager
                 }
                 
                 String[] tokens = line.split(",");
+                
+                if( tokens.length == 2 )
+                	parsingLinks = true;
+                
                 if (!parsingLinks) // parsing gambles 
                 {
-                    Integer gambleId = Integer.parseInt(tokens[0]);
-                    Integer classId = Integer.parseInt(tokens[1]);
-                    Double hv = Double.parseDouble(tokens[2]);
-                    Double hp = Double.parseDouble(tokens[3]);
-                    Double mv = Double.parseDouble(tokens[4]);
-                    Double mp = Double.parseDouble(tokens[5]);
-                    Double lv = Double.parseDouble(tokens[6]);
+                    Integer gambleId = Integer.parseInt(tokens[0].trim());
+                    Integer classId = Integer.parseInt(tokens[1].trim());   // !!!
+                    Double hv = Double.parseDouble(tokens[2].trim());
+                    Double hp = Double.parseDouble(tokens[3].trim());
+                    Double mv = Double.parseDouble(tokens[4].trim());
+                    Double mp = Double.parseDouble(tokens[5].trim());
+                    Double lv = Double.parseDouble(tokens[6].trim());
                     
                     Gamble gamble = new Gamble(hv, hp, mv, mp, lv);
                     
@@ -114,8 +121,8 @@ public class FileManager
                 }
                 else
                 {
-                    Integer gi = Integer.parseInt(tokens[0]);
-                    Integer gj = Integer.parseInt(tokens[1]);
+                    Integer gi = Integer.parseInt(tokens[0].trim());  // !!!
+                    Integer gj = Integer.parseInt(tokens[1].trim());
                     gd.links.put ( 
                         gd.gambles.get(gi), 
                         gd.gambles.get(gj)

@@ -32,7 +32,7 @@ public class Main
         IoManager io = new IoManager(port);
         
         Integer numPlayers = Integer.parseInt(argMap.get("-n"));
-        Players players = io.connect(numPlayers);
+        Players players = new Players(); // = io.connect(numPlayers);
         
         List<Gamble> gambles = generateGambles();
         SetMap<Integer, Integer> links = generateLinks(gambles);
