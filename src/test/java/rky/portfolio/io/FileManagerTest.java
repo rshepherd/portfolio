@@ -6,7 +6,7 @@ public class FileManagerTest
 {
     
     @Test
-    public void test()
+    public void classFavorabilityTest()
     {
         
     }

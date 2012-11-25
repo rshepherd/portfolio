@@ -13,8 +13,6 @@ public final class Luck
 	public static final Luck     neutral = new Luck();
 	public static final Luck unfavorable = new Luck();
 	
-	
-	
 	private Luck()
 	{
 

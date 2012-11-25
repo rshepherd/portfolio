@@ -9,7 +9,6 @@ import org.junit.Test;
 import rky.portfolio.gambles.Gamble;
 import rky.portfolio.gambles.Gambles;
 import rky.portfolio.gambles.Return;
-import rky.portfolio.io.FileManager;
 import rky.util.SetMap;
 
 public class GambleGenTest

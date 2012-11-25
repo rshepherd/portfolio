@@ -11,7 +11,8 @@ import rky.portfolio.gambles.Gamble;
 import rky.portfolio.gambles.Gambles;
 import rky.portfolio.gambles.Luck;
 import rky.portfolio.gambles.Return;
-import rky.portfolio.io.FileManager.GameData;
+import rky.portfolio.io.GameData;
+import rky.portfolio.io.GameData.ClassFavorabilityMap;
 import rky.util.SetMap;
 
 public class GameLoop implements Runnable
@@ -21,7 +22,7 @@ public class GameLoop implements Runnable
 	final Map<Integer, Gamble>   gambles;
 	final Map<Gamble, Integer>   ids;
 	final SetMap<Gamble, Gamble> links;
-	final Map<Integer, Luck>     classes;
+	final ClassFavorabilityMap   classes;
 	final Map<Gamble, Integer>   gambleClasses;
 	final Set<Player>            players;
 	
@@ -37,7 +38,7 @@ public class GameLoop implements Runnable
 		this.gambles       = gameData.gambles;
 		this.ids           = gameData.ids;
 		this.links         = gameData.links;
-		this.classes       = gameData.classes;
+		this.classes       = gameData.classFavorability;
 		this.gambleClasses = gameData.gambleClasses;
 		this.players       = players;
 		this.numberOfTurns = numberOfTurns;
@@ -56,7 +57,7 @@ public class GameLoop implements Runnable
 		
 		for( Gamble g : gamblesInOrder )
 		{
-			Luck classLuck = classes.get( gambleClasses.get(g) );
+			Luck classLuck = classes.get( 0 /*round*/, gambleClasses.get(g) /*class id*/);
 			Return ret = Gambles.playGamble( g, classLuck, played, links.get(g) );
 			played.put( g, ret );
 		}
@@ -94,8 +95,6 @@ public class GameLoop implements Runnable
 				scoreBoard.add( currentTurn, player, profit );
 			}
 		}
-		
-		
 	}
 
 	private void disqualifyPlayer(Player player) {

@@ -6,13 +6,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import rky.portfolio.gambles.Gamble;
 import rky.portfolio.gambles.Luck;
 import rky.portfolio.gambles.Return;
+import rky.portfolio.io.GameData.ClassFavorabilityMap;
 import rky.util.SetMap;
 
 public class FileManager
@@ -64,7 +64,7 @@ public class FileManager
         }
     }
     
-    public static GameData readGameData(String clientInputFile)
+    public static GameData readGameData(String clientInputFile, String classFavoribilityFile)
     {
         GameData gd = new GameData();
         
@@ -123,26 +123,44 @@ public class FileManager
         {
             try
             {
-                if (br != null) br.close();
-            }
-            catch (IOException ex) { }
+                br.close();
+            } catch (Exception ex) { }
         }
+        
+        readClassFavoribilityFile(classFavoribilityFile, gd.classFavorability);
         
         return gd;
     }
     
-    public static class GameData
+    public static void readClassFavoribilityFile(String classFavoribilityFile, ClassFavorabilityMap map)
     {
-        // Gamble id to gamble data
-        public final Map<Integer, Gamble>   gambles       = new HashMap<Integer, Gamble>();
-        // Gamble data to gamble id
-        public final Map<Gamble, Integer>   ids           = new HashMap<Gamble, Integer>();
-        // Gamble to class
-        public final Map<Gamble, Integer>   gambleClasses = new HashMap<Gamble, Integer>();
-        // Gamble links
-        public final SetMap<Gamble, Gamble> links         = new SetMap<Gamble, Gamble>();
-        // favorability.txt
-        public final Map<Integer, Luck>     classes       = new HashMap<Integer, Luck>();
+        try
+        {
+            BufferedReader br = new BufferedReader(new FileReader(classFavoribilityFile));
+            String line;
+            while ((line = br.readLine()) != null)
+            {
+                Integer round = null;
+                Luck luck = null;
+                String classes = null;
+                if (line.contains("Round"))
+                {
+                    round = Integer.parseInt(br.readLine());
+                    luck = br.readLine().contains("Unfavorable") ? Luck.unfavorable : Luck.favorable;
+                    classes = br.readLine();
+                    for (String c : classes.split("\\s+"))
+                    {
+                        int classId = Integer.parseInt(c, 2);
+                        map.put(round, classId, luck);
+                    }
+                }
+            }
+            br.close();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Unable to read class favoribility file.");
+        }
     }
-
+    
 }
