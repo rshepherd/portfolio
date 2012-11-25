@@ -80,30 +80,15 @@ public class FileManager
         try
         {
             br = new BufferedReader(new FileReader(clientInputFile));
-            boolean parsingLinks = false;
             String line;
             while ((line = br.readLine()) != null)
             {
             	if( line.length() == 0 || line.charAt(0) == '#')
             		continue;
             	
-                if (line.contains(GAMBLES_HEADER))
-                {
-                    continue;
-                }
-                
-                if (line.contains(LINKS_HEADER))
-                {
-                    parsingLinks = true;
-                    continue;
-                }
-                
                 String[] tokens = line.split(",");
                 
-                if( tokens.length == 2 )
-                	parsingLinks = true;
-                
-                if (!parsingLinks) // parsing gambles 
+                if (tokens.length > 2) // parsing gambles 
                 {
                     Integer gambleId = Integer.parseInt(tokens[0].trim());
                     Integer classId = Integer.parseInt(tokens[1].trim());   // !!!
