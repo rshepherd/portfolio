@@ -21,7 +21,6 @@ public class FileManager
     private static final String GAMBLES_HEADER = "# gamble_id, class_id, h_ret, h_prob, m_ret, m_prob, l_ret, l_prob\n";
     private static final String LINKS_HEADER = "# gi, gj\n";
     
-    // TODO - Take a map of gambles to classes Map<Gamble, Integer> gambleClasses,
     public static String writeInputFile(List<Gamble> gambles, SetMap<Integer, Integer> links) 
     {
         try
@@ -80,30 +79,15 @@ public class FileManager
         try
         {
             br = new BufferedReader(new FileReader(clientInputFile));
-            boolean parsingLinks = false;
             String line;
             while ((line = br.readLine()) != null)
             {
             	if( line.length() == 0 || line.charAt(0) == '#')
             		continue;
             	
-                if (line.contains(GAMBLES_HEADER))
-                {
-                    continue;
-                }
-                
-                if (line.contains(LINKS_HEADER))
-                {
-                    parsingLinks = true;
-                    continue;
-                }
-                
                 String[] tokens = line.split(",");
                 
-                if( tokens.length == 2 )
-                	parsingLinks = true;
-                
-                if (!parsingLinks) // parsing gambles 
+                if (tokens.length > 2) // parsing gambles 
                 {
                     Integer gambleId = Integer.parseInt(tokens[0].trim());
                     Integer classId = Integer.parseInt(tokens[1].trim());   // !!!

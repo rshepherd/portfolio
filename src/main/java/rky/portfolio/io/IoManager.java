@@ -17,7 +17,7 @@ public class IoManager
 
     public Players connect(int numPlayers)
     {
-        return server.start(numPlayers);
+        return server.start(numPlayers, this);
     }
 
     public void send(Player p, Message m)
@@ -27,6 +27,14 @@ public class IoManager
         server.send(p, m.toString());
     }
 
+    public Message receive(Player p, int timeout)
+    {
+        Message m = new Message(server.receive(p, timeout));
+        broadcastToListeners(p, m, false);
+        System.out.println(p.name + "->S" + ": " + m);
+        return m;
+    }
+    
     public Message receive(Player p)
     {
         Message m = new Message(server.receive(p));

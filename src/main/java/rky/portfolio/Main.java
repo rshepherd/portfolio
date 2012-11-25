@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import rky.portfolio.Player.Players;
 import rky.portfolio.gambles.Gamble;
@@ -33,7 +32,7 @@ public class Main
         
         Integer numPlayers = Integer.parseInt(argMap.get("-n"));
         Players players = new Players(); // = io.connect(numPlayers);
-        players.add( new Player("dummy") );
+        players.add( new Player("dummy", io) );
         
         List<Gamble> gambles = generateGambles();
         SetMap<Integer, Integer> links = generateLinks(gambles);
