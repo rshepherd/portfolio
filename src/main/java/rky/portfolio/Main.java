@@ -74,4 +74,5 @@ public class Main
         System.err.println("\t -f Optional. Use this file of gambles and links. If absent a new file is generated. ");
         System.err.println("\nex: java -jar portfolio-1.0.0.jar -p 54321 -n 5 -m 2 -g false -f /path/file.txt ");
     }
+    
 }

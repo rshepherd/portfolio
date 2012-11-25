@@ -24,7 +24,6 @@ public class Gamble
 	private final double retl;
 	
 	
-	
 	public Gamble()
 	{
 		this( 3, 0.3, 2, 0.4, 1 );
@@ -76,8 +75,6 @@ public class Gamble
 		this.probm = pm;
 		this.probl = pl;
 	}
-	
-	
 	
 	public double getV( Return r )
 	{

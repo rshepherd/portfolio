@@ -1,7 +1,9 @@
 package rky.portfolio.io;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,8 +18,10 @@ import rky.util.SetMap;
 public class FileManager
 {
     private static final String FILE_NAME = "gambles-%d.txt";
+    private static final String GAMBLES_HEADER = "# gamble_id, class_id, h_ret, h_prob, m_ret, m_prob, l_ret, l_prob\n";
+    private static final String LINKS_HEADER = "# gi, gj\n";
     
-    public static String writeInputFile(List<Gamble> gambles, SetMap<Integer, Integer> links) 
+    public static String writeInputFile(List<Gamble> gambles, Map<Gamble, Integer> gambleClasses, SetMap<Integer, Integer> links) 
     {
         try
         {
@@ -26,13 +30,13 @@ public class FileManager
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
             
-            bw.write("# gamble_id, class_id, h_ret, h_prob, m_ret, m_prob, l_ret, l_prob\n");
+            bw.write(GAMBLES_HEADER);
             for( int i = 0; i < gambles.size(); i++ )
             {
                 Gamble g = gambles.get(i);
                 bw.write(String.format(
                         "%d, %d, %f, %f, %f, %f, %f \n",
-                        i, (int)(Math.random() * 16),
+                        i, gambleClasses.get(g),
                         g.getV(Return.high  ), g.getP(Return.high),
                         g.getV(Return.medium), g.getP(Return.medium),
                         g.getV(Return.low   ), g.getP(Return.low)
@@ -41,7 +45,7 @@ public class FileManager
             
             links = SetMap.distinct(links);
             
-            bw.write("\n# gi, gj\n");
+            bw.write("\n"+LINKS_HEADER);
             for (Integer key : links.keySet())
             {
                 for (Integer val : links.get(key))
@@ -56,24 +60,89 @@ public class FileManager
         }
         catch (IOException e)
         {
-            e.printStackTrace(System.err);
+            throw new RuntimeException("Unable to generate input file.");
         }
-
-        throw new RuntimeException("Unable to generate input file.");
     }
     
-    public static GameData readAllFiles(String inputFile)
+    public static GameData readGameData(String clientInputFile)
     {
-        return new GameData();
+        GameData gd = new GameData();
+        
+        BufferedReader br = null;
+        try
+        {
+            br = new BufferedReader(new FileReader(clientInputFile));
+            boolean parsingLinks = false;
+            String line;
+            while ((line = br.readLine()) != null)
+            {
+                if (line.contains(GAMBLES_HEADER))
+                {
+                    continue;
+                }
+                
+                if (line.contains(LINKS_HEADER))
+                {
+                    parsingLinks = true;
+                    continue;
+                }
+                
+                String[] tokens = line.split(",");
+                if (!parsingLinks) // parsing gambles 
+                {
+                    Integer gambleId = Integer.parseInt(tokens[0]);
+                    Integer classId = Integer.parseInt(tokens[1]);
+                    Double hv = Double.parseDouble(tokens[2]);
+                    Double hp = Double.parseDouble(tokens[3]);
+                    Double mv = Double.parseDouble(tokens[4]);
+                    Double mp = Double.parseDouble(tokens[5]);
+                    Double lv = Double.parseDouble(tokens[6]);
+                    
+                    Gamble gamble = new Gamble(hv, hp, mv, mp, lv);
+                    
+                    gd.gambles.put(gambleId, gamble);
+                    gd.ids.put(gamble, gambleId);
+                    gd.gambleClasses.put(gamble, classId);
+                }
+                else
+                {
+                    Integer gi = Integer.parseInt(tokens[0]);
+                    Integer gj = Integer.parseInt(tokens[1]);
+                    gd.links.put ( 
+                        gd.gambles.get(gi), 
+                        gd.gambles.get(gj)
+                    );
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Unable to read input file.");
+        }
+        finally
+        {
+            try
+            {
+                if (br != null) br.close();
+            }
+            catch (IOException ex) { }
+        }
+        
+        return gd;
     }
     
     public static class GameData
     {
+        // Gamble id to gamble data
         public final Map<Integer, Gamble>   gambles       = new HashMap<Integer, Gamble>();
+        // Gamble data to gamble id
         public final Map<Gamble, Integer>   ids           = new HashMap<Gamble, Integer>();
-        public final SetMap<Gamble, Gamble> links         = new SetMap<Gamble, Gamble>();
-        public final Map<Integer, Luck>     classes       = new HashMap<Integer, Luck>();
+        // Gamble to class
         public final Map<Gamble, Integer>   gambleClasses = new HashMap<Gamble, Integer>();
+        // Gamble links
+        public final SetMap<Gamble, Gamble> links         = new SetMap<Gamble, Gamble>();
+        // favorability.txt
+        public final Map<Integer, Luck>     classes       = new HashMap<Integer, Luck>();
     }
 
 }

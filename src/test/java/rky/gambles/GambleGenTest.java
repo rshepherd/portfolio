@@ -81,8 +81,5 @@ public class GambleGenTest
 				}
 			}
 		}
-		
-		System.out.println(FileManager.writeInputFile(gambles, links));		
-		
 	}
 }
