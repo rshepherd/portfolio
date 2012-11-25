@@ -38,7 +38,7 @@ public class ScoreBoard
 		this.mode = mode;
 		this.players = players;
 		budgets = new ArrayList<Map<Player, BoardCell>>(numTurns+1);
-		for( int i = 0; i < numTurns; i++ ) {
+		for( int i = 0; i < numTurns+1; i++ ) {
 			budgets.add(new HashMap<Player, BoardCell>());
 		}
 		for( Player p : players ) {

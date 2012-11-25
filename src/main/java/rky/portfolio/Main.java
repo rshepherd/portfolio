@@ -33,6 +33,7 @@ public class Main
         
         Integer numPlayers = Integer.parseInt(argMap.get("-n"));
         Players players = new Players(); // = io.connect(numPlayers);
+        players.add( new Player("dummy") );
         
         List<Gamble> gambles = generateGambles();
         SetMap<Integer, Integer> links = generateLinks(gambles);
@@ -41,6 +42,7 @@ public class Main
         GameData gameData = FileManager.readGameData(clientInputFile);
         
         GameLoop gameLoop = new GameLoop( gameData, players, ScoreBoard.GameMode.mode1 );
+        gameLoop.run();
     }
     
     private static void validate(Map<String, String> args)

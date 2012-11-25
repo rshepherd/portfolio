@@ -88,6 +88,7 @@ public class GameLoop implements Runnable
 				disqualifyPlayer( player );
 			
 			Map<Gamble, Return> gambleReturns = playGambles();
+			System.out.println( "Gamble returns: " + gambleReturns );
 			
 			for( Player player : playerMoneyDistributions.keySet() )
 			{
