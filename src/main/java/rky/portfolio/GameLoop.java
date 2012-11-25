@@ -120,6 +120,11 @@ public class GameLoop implements Runnable
 			System.out.println( scoreBoard );
 		}
 	}
+	
+	public ScoreBoard getScoreBoard()
+    {
+        return scoreBoard;
+    }
 
 	private void disqualifyPlayer(Player player)
 	{
@@ -230,4 +235,5 @@ public class GameLoop implements Runnable
 		double currentBudget = scoreBoard.getStartBudget(currentTurn, player, gameMode);
 		// TODO send the player starting value "currentBudget"
 	}
+
 }

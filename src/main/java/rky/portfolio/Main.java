@@ -27,8 +27,7 @@ public class Main
         Integer port = Integer.parseInt(argMap.get("-p"));
         IoManager io = new IoManager(port);
         Integer numPlayers = Integer.parseInt(argMap.get("-n"));
-        Players players = new Players(); // = io.connect(numPlayers);
-        players.add( new Player("dummy", io) );
+        Players players = io.connect(numPlayers);
         
         // Maybe generate a new set of gambles
         String clientInputFile = argMap.get("-f");

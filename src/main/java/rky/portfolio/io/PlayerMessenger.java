@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import rky.portfolio.Player;
 
@@ -52,17 +51,9 @@ public class PlayerMessenger implements Runnable
             executor.execute(pm);
         }
 
-        try
-        {
-            // This is OK since we are timing out on the socket
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
-        }
-        catch (InterruptedException e1)
-        {
-        }
-
         executor.shutdown();
-
+        while (!executor.isTerminated());
+        
         Map<Player, Message> responses = new LinkedHashMap<Player, Message>();
         for (PlayerMessenger pm : pms)
         {

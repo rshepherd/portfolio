@@ -125,6 +125,7 @@
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
 							<mainClass>rky.portfolio.Main</mainClass>
+							<!-- <mainClass>rky.portfolio.client.DumbClient</mainClass> -->
 						</manifest>
 					</archive>
 				</configuration>
