@@ -3,6 +3,7 @@ package rky.portfolio;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,8 +26,9 @@ public class GameLoop implements Runnable
 	final ClassFavorabilityMap   classes;
 	final Map<Gamble, Integer>   gambleClasses;
 	final Set<Player>            players;
+	final Set<Player>            disqualifiedPlayers = new HashSet<Player>();
 	
-	final Map<Player, String> playerErrors = new HashMap<Player, String>();
+	final Map<Player, String>    playerErrors = new HashMap<Player, String>();
 
 	final ScoreBoard.GameMode gameMode;
 	final ScoreBoard scoreBoard;
@@ -92,16 +94,28 @@ public class GameLoop implements Runnable
 			
 			for( Player player : playerMoneyDistributions.keySet() )
 			{
+				if( disqualified( player ) )
+					continue;
+				
 				double profit = computeProfit( gambleReturns, playerMoneyDistributions.get(player) );
 				scoreBoard.add( currentTurn, player, profit );
 			}
+			System.out.println( scoreBoard );
 		}
 	}
 
-	private void disqualifyPlayer(Player player) {
+	private void disqualifyPlayer(Player player)
+	{
 		// TODO Auto-generated method stub
 		
+		disqualifiedPlayers.add( player );
+		
 		throw new RuntimeException(player + " broke something");
+	}
+	
+	private boolean disqualified( Player player )
+	{
+		return disqualifiedPlayers.contains( player );
 	}
 
 	private double computeProfit(Map<Gamble, Return> gambleReturns, Map<Integer, Double> investments)

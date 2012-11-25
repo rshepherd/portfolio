@@ -25,6 +25,11 @@ public class ScoreBoard
 		
 		public double startBudget;
 		public double profit;
+		
+		public String toString()
+		{
+			return "[startBudget=" + startBudget + ", profit=" + profit + "]";
+		}
 	}
 	
 	Set<Player> players = new HashSet<Player>();
@@ -64,5 +69,10 @@ public class ScoreBoard
 			return 1.0;
 		
 		return getBudget( turnNumber, player );
+	}
+	
+	public String toString()
+	{
+		return budgets.toString();
 	}
 }
