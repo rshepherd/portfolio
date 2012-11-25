@@ -2,6 +2,7 @@ package rky.portfolio.io;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import rky.portfolio.gambles.Gamble;
 import rky.portfolio.gambles.Luck;
@@ -51,6 +52,19 @@ public class GameData
         {
             return (round.toString() +","+ classId.toString()).hashCode();
         }
+
+        @Override
+        public String toString()
+        {
+            String str = "";
+            for (Entry<Integer, Luck> e : map.entrySet())
+            {
+                str += "\n\tkey=" + e.getKey() + "\tvalue=" + e.getValue().toString();
+            }
+
+            return "ClassFavorabilityMap [" + str + "\n]";
+        }
+        
     }
     
 }

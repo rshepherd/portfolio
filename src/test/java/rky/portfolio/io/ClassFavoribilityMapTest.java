@@ -41,6 +41,8 @@ public class ClassFavoribilityMapTest
         
         assertEquals(Luck.neutral, cfm.get(5, 10));
         assertEquals(Luck.neutral, cfm.get(1, 15));
+        
+        System.out.println(cfm.toString());
     }
 
 }

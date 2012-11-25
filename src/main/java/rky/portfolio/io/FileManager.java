@@ -67,8 +67,7 @@ public class FileManager
     // For game mode 1
     public static GameData readGameData(String clientInputFile)
     {   
-        String classFavoribilityFile = new Object().getClass().getClassLoader().getResource("favorability.txt").getFile();
-        return readGameData(clientInputFile, classFavoribilityFile);
+        return readGameData(clientInputFile, "src/main/resources/favorability.txt");
     }
     
     // For game mode 2
@@ -154,6 +153,15 @@ public class FileManager
                 if (line.contains("Round"))
                 {
                     round = Integer.parseInt(br.readLine());
+                    // Read Favorable
+                    luck = br.readLine().contains("Unfavorable") ? Luck.unfavorable : Luck.favorable;
+                    classes = br.readLine();
+                    for (String c : classes.split("\\s+"))
+                    {
+                        int classId = Integer.parseInt(c, 2);
+                        map.put(round, classId, luck);
+                    }
+                    // Read Unfavorable
                     luck = br.readLine().contains("Unfavorable") ? Luck.unfavorable : Luck.favorable;
                     classes = br.readLine();
                     for (String c : classes.split("\\s+"))
