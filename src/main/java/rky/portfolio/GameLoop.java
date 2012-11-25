@@ -14,6 +14,8 @@ import rky.portfolio.gambles.Luck;
 import rky.portfolio.gambles.Return;
 import rky.portfolio.io.GameData;
 import rky.portfolio.io.GameData.ClassFavorabilityMap;
+import rky.portfolio.io.Message;
+import rky.portfolio.io.PlayerMessenger;
 import rky.util.SetMap;
 
 public class GameLoop implements Runnable
@@ -109,8 +111,6 @@ public class GameLoop implements Runnable
 		// TODO Auto-generated method stub
 		
 		disqualifiedPlayers.add( player );
-		
-		throw new RuntimeException(player + " broke something");
 	}
 	
 	private boolean disqualified( Player player )
@@ -133,20 +133,39 @@ public class GameLoop implements Runnable
 	{
 		playerErrors.clear();
 		
+		Map<Player, Message> playerMessageMap = new HashMap<Player, Message>();
+		for( Player player : players )
+		{
+			if( disqualified(player) )
+				continue;
+			
+			playerMessageMap.put( player, new Message("" + scoreBoard.getStartBudget(currentTurn, player, gameMode)) );
+		}
+		
+		Map<Player, Message> playerResponses = PlayerMessenger.getResponses(playerMessageMap);
 		Map<Player, Map<Integer, Double>> distributions = new HashMap<Player, Map<Integer, Double>>();
-		// first send the requests to all
-		for( Player player : players )
+		
+		for( Player p : playerResponses.keySet() )
 		{
-			sendDistributionRequest(player);
+			try
+			{
+				Map<Integer, Double> distribution = Message.parseDistribution(playerResponses.get(p));
+				if( distribution == null )
+				{
+					throw new RuntimeException("Ran out of time");
+				}
+				if( !isValidMoneyDistribution( distribution ) ) 
+				{
+					throw new RuntimeException("Submitted an invalid money distribution");
+				}
+				distributions.put( p, distribution );
+			} 
+			catch (Exception e)
+			{
+				playerErrors.put( p, e.toString() );
+			}
 		}
-		for( Player player : players )
-		{
-			Map<Integer, Double> moneyDistrib = getPlayerMoneyDistribution(player);
-			if( ! isValidMoneyDistribution(moneyDistrib) )
-				playerErrors.put( player, "Submitted an invalid money distribution" );
-			else
-				distributions.put( player, moneyDistrib );
-		}
+		
 		return distributions;
 	}
 
