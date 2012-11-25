@@ -94,6 +94,18 @@ public class GameLoop implements Runnable
 			Map<Gamble, Return> gambleReturns = playGambles();
 			System.out.println( "Gamble returns: " + gambleReturns );
 			
+			StringBuilder gambleReturnsStringBuilder = new StringBuilder("[");
+			for( Integer gambleId : gambles.keySet() )
+			{
+				gambleReturnsStringBuilder.append(gambleId);
+				gambleReturnsStringBuilder.append(":");
+				gambleReturnsStringBuilder.append(gambleReturns.get(gambles.get(gambleId)).getAliesChar());
+				gambleReturnsStringBuilder.append(", ");
+			}
+			gambleReturnsStringBuilder.setLength( gambleReturnsStringBuilder.length()-2);
+			gambleReturnsStringBuilder.append("]");
+			String gambleReturnsString = gambleReturnsStringBuilder.toString();
+			
 			for( Player player : playerMoneyDistributions.keySet() )
 			{
 				if( disqualified( player ) )
@@ -101,7 +113,10 @@ public class GameLoop implements Runnable
 				
 				double profit = computeProfit( gambleReturns, playerMoneyDistributions.get(player) );
 				scoreBoard.add( currentTurn, player, profit );
+				
+				player.send( new Message(gambleReturnsString) );
 			}
+			
 			System.out.println( scoreBoard );
 		}
 	}
@@ -159,9 +174,11 @@ public class GameLoop implements Runnable
 					throw new RuntimeException("Submitted an invalid money distribution");
 				}
 				distributions.put( p, distribution );
+				p.send(Message.ACK);
 			} 
 			catch (Exception e)
 			{
+				p.send( Message.createError( e.getMessage() ) );
 				playerErrors.put( p, e.toString() );
 			}
 		}
