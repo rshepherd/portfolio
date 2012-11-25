@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class Server
         }
     }
 
-    public Players start(int numPlayers)
+    public Players start(int numPlayers, IoManager io)
     {
         Players players = new Players();
         
@@ -39,7 +40,7 @@ public class Server
             {
                 Socket p1Socket = serverSocket.accept();
                 Client c = new Client(p1Socket);
-                Player p = new Player(c.receive());
+                Player p = new Player(c.receive(), io);
                 clients.put(p, c);
                 players.add(p);
                 System.out.println(p.name + " connected as player " + i);
@@ -63,6 +64,11 @@ public class Server
         return clients.get(p).receive();
     }
     
+    public String receive(Player p, int timeout)
+    {
+        return clients.get(p).receive(timeout);
+    }
+    
     public void shutdown()
     {
         for (Client c : clients.values())
@@ -80,9 +86,11 @@ public class Server
     {
         private final BufferedReader in;
         private final PrintWriter    out;
+        private final Socket socket;
 
         public Client(Socket s) throws Exception
         {
+            socket = s;
             out = new PrintWriter(s.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(s.getInputStream()));
         }
@@ -92,25 +100,37 @@ public class Server
             try
             {
                 out.println(s);
+                return;
             }
             catch (Exception e)
             {
                 e.printStackTrace(System.err);
-                throw new RuntimeException("Unable to send message to client.");
             }
+            
+            throw new RuntimeException("Unable to send message to client.");
+        }
+        
+        public String receive()
+        {
+            return receive(Integer.MAX_VALUE);
         }
 
-        public String receive()
+        public String receive(int timeout)
         {
             try
             {
+                socket.setSoTimeout(timeout);
                 String message;
                 while ((message = in.readLine()) != null)
                 {
                     return message;
                 }
             }
-            catch (IOException e)
+            catch(SocketException se) 
+            {
+                return null;
+            }
+            catch (Exception e)
             {
                 e.printStackTrace(System.err);
             }

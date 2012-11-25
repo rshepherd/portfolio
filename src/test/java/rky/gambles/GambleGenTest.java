@@ -58,8 +58,6 @@ public class GambleGenTest
 					));
 		}
 		
-		
-		
 		Map<Gamble, Integer> gambleIds = new HashMap<Gamble, Integer>();
 		
 		for( int i = 0; i < numGambles; i++ )
@@ -82,7 +80,5 @@ public class GambleGenTest
 				}
 			}
 		}
-		
-		
 	}
 }

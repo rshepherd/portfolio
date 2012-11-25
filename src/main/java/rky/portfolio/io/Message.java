@@ -1,5 +1,8 @@
 package rky.portfolio.io;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Message
 {
     public static final Message ACK = new Message("OK");
@@ -17,6 +20,29 @@ public class Message
         {
             this.body += " " + b;
         }
+    }
+    
+    public static Map<Integer, Double> parseDistribution( Message m )
+    {
+    	Map<Integer, Double> map = new HashMap<Integer, Double>();
+    	
+    	if( m.body.charAt(0) != '[' || m.body.charAt(m.body.length()-1) != ']' )
+    		throw new IllegalArgumentException("Messaged expected to be wrapped in '[' and ']': " + m.body );
+    	
+    	String[] pairs = m.body.substring(1, m.body.length()-1).split(", ");
+    	for( String p : pairs )
+    	{
+    		String[] pair = p.split(":");
+    		if( pair.length != 2 )
+    			throw new RuntimeException("coulnd't properly break pair (" + p + ") in message " + m.body);
+    		
+    		Integer id = Integer.parseInt(pair[0]);
+    		Double value = Double.parseDouble(pair[1]);
+    		
+    		map.put( id, value );
+    	}
+    	
+    	return map;
     }
 
     /**

@@ -28,4 +28,12 @@ public final class Return
 		if( this == low    )     return "Return[LOW]";
 		throw new RuntimeException( "unexpected instance of Return" );
 	}
+
+	public Character getAliesChar()
+	{
+		if( this == high   )     return 'h';
+		if( this == medium )     return 'm';
+		if( this == low    )     return 'l';
+		throw new RuntimeException( "unexpected instance of Return" );
+	}
 }
