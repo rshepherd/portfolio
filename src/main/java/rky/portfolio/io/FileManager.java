@@ -17,7 +17,7 @@ import rky.util.SetMap;
 
 public class FileManager
 {
-    private static final String FILE_NAME = "gambles-%d.txt";
+    private static final String FILE_NAME = "/tmp/gambles-%d.txt";
     private static final String GAMBLES_HEADER = "# gamble_id, class_id, h_ret, h_prob, m_ret, m_prob, l_ret, l_prob\n";
     private static final String LINKS_HEADER = "# gi, gj\n";
     
