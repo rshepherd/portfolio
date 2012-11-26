@@ -34,7 +34,7 @@ public class GambleGenTest
 		
 		for( int i = 0; i < numGambles; i++ )
 		{
-			gambleExpectedReturns.set( i, gambleExpectedReturns.get(i) * AVERAGE_EXPECTED / sum );
+			gambleExpectedReturns.set( i, gambleExpectedReturns.get(i) * AVERAGE_EXPECTED * numGambles / sum );
 		}
 		
 		ArrayList<Gamble> gambles = new ArrayList<Gamble>(numGambles);
@@ -50,7 +50,7 @@ public class GambleGenTest
 		{
 			Gamble g = gambles.get(i);
 			System.out.println(String.format(
-					"%d, %d, %f, %f, %f, %f, %f",
+					"%d, %d, %f, %f, %f, %f, %f, %f",
 					i, (int)(Math.random() * 16),
 					g.getV(Return.high  ), g.getP(Return.high),
 					g.getV(Return.medium), g.getP(Return.medium),
