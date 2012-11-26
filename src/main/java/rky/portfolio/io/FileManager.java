@@ -35,7 +35,7 @@ public class FileManager
             {
                 Gamble g = gambles.get(i);
                 bw.write(String.format(
-                        "%d, %d, %f, %f, %f, %f, %f \n",
+                        "%d, %d, %f, %f, %f, %f, %f, %f\n",
                         i, new Random().nextInt() % 16,
                         g.getV(Return.high  ), g.getP(Return.high),
                         g.getV(Return.medium), g.getP(Return.medium),
