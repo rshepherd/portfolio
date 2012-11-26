@@ -20,7 +20,6 @@ public class ScoreBoard
 {
 	static class BoardCell
 	{
-		List<Double> returns = new ArrayList<Double>();
 
 		public BoardCell(double startBudget, double profit)
 		{
@@ -30,6 +29,7 @@ public class ScoreBoard
 		
 		public double startBudget;
 		public double profit;
+		public double sharpeRatio;
 		
 		public String toString()
 		{
@@ -40,7 +40,7 @@ public class ScoreBoard
 	Set<Player> players = new HashSet<Player>();
 	final GameMode mode;
 	ArrayList<Map<Player, BoardCell>> budgets;   //array is indexed by turn number
-	
+	ArrayList<Double> returns = new ArrayList<Double>();
 	
 	public enum GameMode { mode1, mode2 };
 	
@@ -71,21 +71,22 @@ public class ScoreBoard
 		}
 		else
 		{
-			List<Double> returns = new ArrayList<Double>();
 			
 			for( Map<Player, BoardCell> map : budgets )
 			{
 				if( map.containsKey(player) )
-					returns = map.get(player).returns;
+					return map.get(player).sharpeRatio;
 			}
 			
-			return caculateSharpeRatio(player,returns);
+			return 0.0;
 		}
 	}
 	
-	public double caculateSharpeRatio(Player player,List<Double> returns)
+	public double caculateSharpeRatio(Player player,Double profit)
 	{
 
+		returns.add( profit);
+		
 		double sum = 0.0;
 		for(Double ret:returns)
 		{
@@ -111,8 +112,8 @@ public class ScoreBoard
 	public void add( int turnNumber, Player player, double profit )
 	{
 		BoardCell cell = budgets.get(turnNumber).get(player);
-		cell.returns.add(profit);
 		cell.profit = profit;
+		cell.sharpeRatio = caculateSharpeRatio(player,profit);
 		budgets.get(turnNumber+1).put(player, new BoardCell(cell.startBudget + profit, 0));
 	}
 

@@ -94,6 +94,7 @@ public class Controller extends JApplet {
 	private final int WIDTH = 1195;
 	
 	boolean isHistagramLoaded = false;
+	boolean isTableLoaded = false;
 
 	private final HashMap<Integer,rky.portfolio.Player> mappIdtorkyPlayer = new HashMap<Integer, rky.portfolio.Player>();
 
@@ -818,7 +819,10 @@ public class Controller extends JApplet {
 				playerList.get(i).setSharpeRatio((sb.getFinalScore(mappIdtorkyPlayer.get(pid))));
 			}
 		}
-		initTable();
+		if(!isTableLoaded){
+			isTableLoaded = true;
+			initTable();
+		}
 		updateInfoTable();
 	}
 
