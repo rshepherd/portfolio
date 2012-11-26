@@ -23,7 +23,7 @@ public class Main
         Map<String,String> argMap = CommandLineUtils.simpleCommandLineParser(args);
         validate(argMap);
         
-        // Initialize connections with Players
+        // Initialize connections with players
         Integer port = Integer.parseInt(argMap.get("-p"));
         IoManager io = new IoManager(port);
         Integer numPlayers = Integer.parseInt(argMap.get("-n"));
@@ -63,7 +63,7 @@ public class Main
         loop.run();
         ScoreBoard scores = loop.getScoreBoard();
         
-        // Send game over message
+        // Send game-over messages
         for (Player p : players)
         {
             p.send(Message.createGameOver(scores.getFinalScore(p)));
@@ -115,7 +115,7 @@ public class Main
             String f = args.get("-f");
             if (f != null && !(new File(f).isFile()))
             {
-                throw new Exception("Invalid client input file specified. Maybe use absolute an path? (Or omit for a new random file.)");
+                throw new Exception("Invalid client input file specified. Maybe use an absolute path? (Or omit for a new random file.)");
             }
             
             // class favorability file 
@@ -141,7 +141,7 @@ public class Main
         System.err.println("\t -c Optional. For game mode 2. The class favorability file as specified by Prof. Shasha. ex http://cs.nyu.edu/courses/Fall12/CSCI-GA.2965-001/portattformat");
         System.err.println("\t -g Optional. Display the gui? Accepted values are true or false. Defaults to false.");
         System.err.println("\t -f Optional. Use this file of gambles and links. If absent a new file is generated. ");
-        System.err.println("\nex: java -jar portfolio-1.0.0.jar -p 54321 -n 5 -m 2 -c /favorability/file.txt -g false -f /gambles/file.txt");
+        System.err.println("\nex: java -jar portfolio-1.0.0.jar -p 54321 -n 5 -m mode-1 -c /favorability/file.txt -g false -f /gambles/file.txt");
     }
     
     public static String getModeString(ScoreBoard.GameMode mode)
@@ -167,7 +167,8 @@ public class Main
     {
         Integer numRounds = 5;
         ScoreBoard.GameMode enumMode = getModeEnum(mode);
-        if(ScoreBoard.GameMode.mode2 == enumMode) {
+        if (ScoreBoard.GameMode.mode2 == enumMode)
+        {
             numRounds = 200;
         }
         return numRounds.toString();
