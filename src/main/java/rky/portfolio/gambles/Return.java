@@ -12,13 +12,8 @@ public final class Return
 	public static final Return   high = new Return();
 	public static final Return medium = new Return();
 	public static final Return    low = new Return();
-	
 
-	
-	private Return()
-	{
-		
-	}
+	private Return() { }
 
 	@Override
 	public String toString()

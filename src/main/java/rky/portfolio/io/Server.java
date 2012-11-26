@@ -34,7 +34,6 @@ public class Server
     public Players start(int numPlayers, IoManager io)
     {
         Players players = new Players();
-        
         try
         {
             for (int i = 0; i < numPlayers; i++)

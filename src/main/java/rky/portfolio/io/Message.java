@@ -21,6 +21,7 @@ public class Message
         {
             this.body += b + " ";
         }
+        this.body = this.body.trim();
     }
     
     public static Map<Integer, Double> parseDistribution( Message m )
