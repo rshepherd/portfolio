@@ -139,6 +139,7 @@ public class GameLoop implements Runnable
 		for( Integer gambleId : investments.keySet() )
 		{
 			Gamble g = gambles.get( gambleId );
+			System.out.println( g + ": " + gambleReturns.get(g) + " " + investments.get(gambleId) );
 			profit += g.getV( gambleReturns.get(g) ) * investments.get(gambleId) - investments.get(gambleId);
 		}
 		return profit;

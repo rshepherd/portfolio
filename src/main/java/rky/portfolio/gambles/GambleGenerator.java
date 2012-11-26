@@ -27,7 +27,7 @@ public class GambleGenerator
 
         for (int i = 0; i < NUM_GAMBLES; i++)
         {
-            gambleExpectedReturns.set(i, gambleExpectedReturns.get(i) * AVERAGE_EXPECTED / sum);
+            gambleExpectedReturns.set(i, gambleExpectedReturns.get(i) * AVERAGE_EXPECTED * NUM_GAMBLES / sum);
         }
 
         ArrayList<Gamble> gambles = new ArrayList<Gamble>(NUM_GAMBLES);
