@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
 
@@ -35,8 +36,8 @@ public class FileManager
             {
                 Gamble g = gambles.get(i);
                 bw.write(String.format(
-                        "%d, %d, %f, %f, %f, %f, %f \n",
-                        i, new Random().nextInt() % 16,
+                        "%d, %d, %f, %f, %f, %f, %f, %f \n",
+                        i, Math.abs(new Random().nextInt() % 16),
                         g.getV(Return.high  ), g.getP(Return.high),
                         g.getV(Return.medium), g.getP(Return.medium),
                         g.getV(Return.low   ), g.getP(Return.low)
@@ -67,12 +68,15 @@ public class FileManager
     // For game mode 1
     public static GameData readGameData(String clientInputFile)
     {   
-        return readGameData(clientInputFile, "src/main/resources/favorability.txt");
+        String favorabilityFile = FileManager.class.getClassLoader().getResource("favorability.txt").getFile();
+        return readGameData(clientInputFile, favorabilityFile.substring(5));
     }
     
     // For game mode 2
     public static GameData readGameData(String clientInputFile, String classFavoribilityFile)
     {
+        System.out.println("Loading files " + clientInputFile + " and " + classFavoribilityFile);
+        
         GameData gd = new GameData();
         
         BufferedReader br = null;
