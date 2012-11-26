@@ -41,6 +41,7 @@ public class ScoreBoard
 	final GameMode mode;
 	ArrayList<Map<Player, BoardCell>> budgets;   //array is indexed by turn number
 	ArrayList<Double> returns = new ArrayList<Double>();
+	public HashMap<Player,Integer> winMoves = new HashMap<Player,Integer>(); 
 	
 	public enum GameMode { mode1, mode2 };
 	
@@ -54,18 +55,22 @@ public class ScoreBoard
 		}
 		for( Player p : players ) {
 			budgets.get(0).put(p, new BoardCell(1.0, 0));
+			
+			winMoves.put(p, 0);
 		}
+		
+		
 	}
 	
 	public double getFinalScore( Player player )
 	{
-		if( mode == GameMode.mode1 )
+		if(mode == GameMode.mode1 )
 		{
 			double mostRecentScore = Double.NEGATIVE_INFINITY;
 			for( Map<Player, BoardCell> map : budgets )
 			{
 				if( map.containsKey(player) )
-					mostRecentScore = map.get(player).startBudget;
+					mostRecentScore = winMoves.get(player);
 			}
 			return mostRecentScore;
 		}
@@ -80,6 +85,20 @@ public class ScoreBoard
 			
 			return 0.0;
 		}
+	}
+	public double getProfit( Player player )
+	{
+		double mostRecentScore = 0;
+		if( mode == GameMode.mode1 )
+		{
+	
+			for( Map<Player, BoardCell> map : budgets )
+			{
+				if( map.containsKey(player) )
+					mostRecentScore = map.get(player).profit;
+			}
+		}
+		return mostRecentScore;
 	}
 	
 	public double caculateSharpeRatio(Player player,Double profit)
@@ -113,9 +132,25 @@ public class ScoreBoard
 	{
 		BoardCell cell = budgets.get(turnNumber).get(player);
 		cell.profit = profit;
-		cell.sharpeRatio = caculateSharpeRatio(player,profit);
-		budgets.get(turnNumber+1).put(player, new BoardCell(cell.startBudget + profit, 0));
+		cell.sharpeRatio = caculateSharpeRatio(player,cell.startBudget + cell.profit);
+		
+		if(mode == GameMode.mode1){
+			budgets.get(turnNumber+1).put(player, new BoardCell(1, 0));
+			
+			if(profit > cell.startBudget){
+				Integer winningMoves = winMoves.get(player);
+				if(winningMoves == null){
+					winningMoves = 0;
+				}
+				winningMoves++;
+				winMoves.put(player, winningMoves);
+			}
+		}
+		else
+			budgets.get(turnNumber+1).put(player, new BoardCell(cell.startBudget + profit, 0));
 	}
+
+	
 
 	public double getBudget(int turnNumber, Player player)
 	{
