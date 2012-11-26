@@ -3,6 +3,9 @@ package rky.portfolio;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import rky.portfolio.Player.Players;
 import rky.portfolio.gambles.Gamble;
@@ -11,6 +14,7 @@ import rky.portfolio.io.FileManager;
 import rky.portfolio.io.GameData;
 import rky.portfolio.io.IoManager;
 import rky.portfolio.io.Message;
+import rky.portfolio.io.PlayerMessenger;
 import rky.util.CommandLineUtils;
 import rky.util.SetMap;
 
@@ -58,12 +62,20 @@ public class Main
             p.send(init);
         }
         
-        // Run game
+        // Run game on other thread
         GameLoop loop = new GameLoop( gameData, players, getModeEnum(mode) );
-        loop.run();
-        ScoreBoard scores = loop.getScoreBoard();
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        executor.execute(loop);
+        
+        // Run gui 
+        //...
+        
+        // Shutdown game loop thread
+        executor.shutdown();
+        while (!executor.isTerminated());
         
         // Send game-over messages
+        ScoreBoard scores = loop.getScoreBoard();
         for (Player p : players)
         {
             p.send(Message.createGameOver(scores.getFinalScore(p)));
