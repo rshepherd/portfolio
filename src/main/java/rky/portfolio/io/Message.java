@@ -32,6 +32,9 @@ public class Message
     		throw new IllegalArgumentException("Messaged expected to be wrapped in '[' and ']': " + m.body );
     	
     	String[] pairs = m.body.substring(1, m.body.length()-1).split(", ");
+    	if( pairs.length == 1 && pairs[0].length() == 0 )
+    		return map;
+    	
     	for( String p : pairs )
     	{
     		String[] pair = p.split(":");
