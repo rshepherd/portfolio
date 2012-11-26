@@ -47,8 +47,7 @@ public class Main
 			startGUI();
 		}
 
-		if(applet != null)
-			applet.setPlayers(players);
+		
 
 		// Maybe generate a new set of gambles
 		String clientInputFile = argMap.get("-f");
@@ -82,6 +81,7 @@ public class Main
 				applet.setMode(2);
 			}
 			applet.setNumberOfRounds(Integer.parseInt(getNumRounds(mode)));
+			applet.setPlayers(players);
 		}
 
 		Message init = new Message(clientInputFile, mode, getNumRounds(mode));

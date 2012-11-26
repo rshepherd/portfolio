@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -525,6 +526,8 @@ public class Controller extends JApplet {
 	public void loadHistogram(List<Gamble> gambleList) {
 		showPanel.setHistogramTitle("Return", "Gamble");
 
+		Collections.sort(gambleList);
+		
 		for (Gamble g : gambleList) {
 			showPanel.insert(String.valueOf(g.id), 0);
 		}
@@ -537,6 +540,7 @@ public class Controller extends JApplet {
 	 */
 	public void updateHistogram(List<Gamble> gambleList) {
 
+		Collections.sort(gambleList);
 		for (Gamble p : gambleList) {
 			showPanel.update(String.valueOf(p.id), p.getReturnValue());
 		}
@@ -757,7 +761,7 @@ public class Controller extends JApplet {
 		allocMap.put(0, sliderPlayer1);
 		allocMap.put(1, sliderPlayer2);
 
-		testWithDummyData();
+		//testWithDummyData();
 	}
 
 	/**
@@ -804,7 +808,7 @@ public class Controller extends JApplet {
 	public void updateScore(ScoreBoard sb){
 
 		for(int i = 0 ; i < playerList.size() ; i++){
-			if(sb.getMode() == ScoreBoard.GameMode.mode1){
+			if(MODE == 1){
 
 				Integer pid = playerList.get(i).id;
 				playerList.get(i).setPnl(sb.getFinalScore(mappIdtorkyPlayer.get(pid)));
@@ -814,7 +818,7 @@ public class Controller extends JApplet {
 				playerList.get(i).setSharpeRatio((sb.getFinalScore(mappIdtorkyPlayer.get(pid))));
 			}
 		}
-
+		initTable();
 		updateInfoTable();
 	}
 

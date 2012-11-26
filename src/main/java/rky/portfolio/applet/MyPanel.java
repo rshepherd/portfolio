@@ -113,12 +113,12 @@ class MyPanel extends JPanel {
     	int maxValue = (int)(maxValued);
 
 		
-		for(int i = 10 ; i > 0 && maxValue >= 0; i--){
+		for(int i = 10 ;/* i > 0 &&*/ maxValue >= 0; i--){
 			
 			g.drawString((maxValue)+"",0,
 				(int) (this.getHeight() - SIZE - num*(maxValue)));
 			
-			maxValue = maxValue - 1;
+			maxValue = maxValue - 5;
 		}
 
 		for (int i = 0; i < elem.size(); i++) {
@@ -140,7 +140,7 @@ class MyPanel extends JPanel {
 			
 			g.setFont(saveFont);
 
-			if(i%10 == 0){
+			if(i%50 == 0){
 				g.drawString(elem.get(i), wigth * (i * 2 + 1) + SIZE,
 						this.getHeight() - SIZE + 15);
 			}						

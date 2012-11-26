@@ -8,7 +8,7 @@ import java.util.List;
 /*
  * Gamble Class
  */
-public class Gamble {
+public class Gamble implements Comparable<Gamble> {
 	
 	int id;
 	int classId;
@@ -111,6 +111,10 @@ public class Gamble {
 	public double getLastResult()
 	{
 		return results.get(results.size()-1);
+	}
+
+	public int compareTo(Gamble o) {
+		return (this.id - o.id);
 	}
 	
 
