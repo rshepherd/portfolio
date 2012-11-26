@@ -19,6 +19,16 @@ public class Gamble {
 	double low_return;
 	double lowProb;
 	List<Double> results = new ArrayList<Double>();
+	
+	double returnValue;
+
+	public double getReturnValue() {
+		return returnValue;
+	}
+
+	public void setReturnValue(double returnValue) {
+		this.returnValue = returnValue;
+	}
 
 	public Gamble() {}
 

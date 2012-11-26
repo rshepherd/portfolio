@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Player {
 	
-	private int id;
+	int id;
 	private double wealth;
 	private int score;
 	private boolean cheated;
@@ -18,7 +18,16 @@ public class Player {
 	private double previous;
 	private double sharpeRatio;
 	private String teamName;
+	private double pnl;
 	
+	public double getPnl() {
+		return pnl;
+	}
+
+	public void setPnl(double pnl) {
+		this.pnl = pnl;
+	}
+
 	Player(int id,String name){
 		this.id = id;
 		this.teamName = name;

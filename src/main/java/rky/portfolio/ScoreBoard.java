@@ -6,8 +6,11 @@ package rky.portfolio;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import scala.Array;
 
 /**
  * @author stoked
@@ -17,6 +20,8 @@ public class ScoreBoard
 {
 	static class BoardCell
 	{
+		List<Double> returns = new ArrayList<Double>();
+
 		public BoardCell(double startBudget, double profit)
 		{
 			this.startBudget = startBudget;
@@ -36,6 +41,7 @@ public class ScoreBoard
 	final GameMode mode;
 	ArrayList<Map<Player, BoardCell>> budgets;   //array is indexed by turn number
 	
+	
 	public enum GameMode { mode1, mode2 };
 	
 	public ScoreBoard(GameMode mode, int numTurns, Set<Player> players)
@@ -53,8 +59,8 @@ public class ScoreBoard
 	
 	public double getFinalScore( Player player )
 	{
-//		if( mode == GameMode.mode1 )
-//		{
+		if( mode == GameMode.mode1 )
+		{
 			double mostRecentScore = Double.NEGATIVE_INFINITY;
 			for( Map<Player, BoardCell> map : budgets )
 			{
@@ -62,17 +68,50 @@ public class ScoreBoard
 					mostRecentScore = map.get(player).startBudget;
 			}
 			return mostRecentScore;
-//		}
-//		else
-//		{
-//			 TODO: compute Sharp Ratio
-//			
-//		}
+		}
+		else
+		{
+			List<Double> returns = new ArrayList<Double>();
+			
+			for( Map<Player, BoardCell> map : budgets )
+			{
+				if( map.containsKey(player) )
+					returns = map.get(player).returns;
+			}
+			
+			return caculateSharpeRatio(player,returns);
+		}
+	}
+	
+	public double caculateSharpeRatio(Player player,List<Double> returns)
+	{
+
+		double sum = 0.0;
+		for(Double ret:returns)
+		{
+			sum += ret;
+		}
+		double returnSum = sum;
+		if(returnSum == 0)
+		{
+			return 0;
+		}
+		
+		double mean = sum/returns.size();
+		double var = 0.0;
+		for(Double ret:returns)
+		{
+			var += Math.pow(ret-mean, 2);
+		}
+		var = Math.sqrt(var/returns.size());
+		
+		return returnSum / var;
 	}
 	
 	public void add( int turnNumber, Player player, double profit )
 	{
 		BoardCell cell = budgets.get(turnNumber).get(player);
+		cell.returns.add(profit);
 		cell.profit = profit;
 		budgets.get(turnNumber+1).put(player, new BoardCell(cell.startBudget + profit, 0));
 	}
@@ -88,6 +127,10 @@ public class ScoreBoard
 			return 1.0;
 		
 		return getBudget( turnNumber, player );
+	}
+	
+	public GameMode getMode(){
+		return this.mode;
 	}
 	
 	public String toString()

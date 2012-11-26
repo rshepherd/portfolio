@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import rky.portfolio.applet.Controller;
 import rky.portfolio.gambles.Gamble;
 import rky.portfolio.gambles.Gambles;
 import rky.portfolio.gambles.Luck;
@@ -24,6 +25,7 @@ public class GameLoop implements Runnable
 	
 	final Map<Integer, Gamble>   gambles;
 	final Map<Gamble, Integer>   ids;
+
 	final SetMap<Gamble, Gamble> links;
 	final ClassFavorabilityMap   classes;
 	final Map<Gamble, Integer>   gambleClasses;
@@ -36,6 +38,16 @@ public class GameLoop implements Runnable
 	final ScoreBoard scoreBoard;
 	final int numberOfTurns;
 	int currentTurn;
+	
+	Controller applet;
+
+	public Controller getApplet() {
+		return applet;
+	}
+
+	public void setApplet(Controller applet) {
+		this.applet = applet;
+	}
 	
 	public GameLoop( GameData gameData, Set<Player> players, ScoreBoard.GameMode gameMode )
 	{
@@ -88,6 +100,9 @@ public class GameLoop implements Runnable
 			// mapping for each player of their money distributions
 			Map<Player, Map<Integer, Double>> playerMoneyDistributions = getDistributionsFromPlayers();
 			
+			if(applet != null)
+				applet.setCurrentRound(currentTurn+1);
+			
 			for( Player player : playerErrors.keySet() )
 				disqualifyPlayer( player );
 			
@@ -112,9 +127,13 @@ public class GameLoop implements Runnable
 				
 				double profit = computeProfit( gambleReturns, playerMoneyDistributions.get(player) );
 				scoreBoard.add( currentTurn, player, profit * scoreBoard.getBudget(currentTurn, player) );
+				if(applet != null)
+					applet.updateScore(scoreBoard);
 				
 				player.send( new Message(gambleReturnsString) );
 			}
+			if(applet != null)
+				applet.showGambles(gambleReturns, ids);
 		}
 	}
 	

@@ -14,8 +14,10 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JApplet;
@@ -31,6 +33,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import rky.portfolio.ScoreBoard;
 
 /*
  * Game Controller
@@ -87,6 +91,10 @@ public class Controller extends JApplet {
 	private DefaultTableModel dtm;
 
 	private final int WIDTH = 1195;
+	
+	boolean isHistagramLoaded = false;
+
+	private final HashMap<Integer,rky.portfolio.Player> mappIdtorkyPlayer = new HashMap<Integer, rky.portfolio.Player>();
 
 	public String getWinner()
 	{
@@ -169,7 +177,6 @@ public class Controller extends JApplet {
 		showPanel.init();
 		loadHistogram(gambleList);
 		updateInfoTable();
-
 
 	}
 
@@ -325,12 +332,12 @@ public class Controller extends JApplet {
 			for(int i=0;i<playerList.size();i++)
 			{
 				Player  player = playerList.get(i);
-				String score = formatter.format(player.getScore());
-				String PNL = formatter.format(player.getPNL());
+				//String score = formatter.format(player.getScore());
+				String PNL = formatter.format(player.getPnl());
 				String teamName = playerList.get(i).getTeamName();
 				dtm.setValueAt(teamName, i, 0);
-				dtm.setValueAt(score, i, 1);
-				dtm.setValueAt(PNL, i, 2);
+				//dtm.setValueAt(score, i, 1);
+				dtm.setValueAt(PNL, i, 1);
 
 				infoTable.updateUI();
 			}
@@ -340,13 +347,13 @@ public class Controller extends JApplet {
 			for(int i=0;i<playerList.size();i++)
 			{
 				Player  player = playerList.get(i);
-				String current = formatter.format(player.getWealth());
-				String previous = formatter.format(player.getPrevious());
+				//String current = formatter.format(player.getWealth());
+				//String previous = formatter.format(player.getPrevious());
 				String sharpe = formatter.format(player.getSharpeRatio());
 				dtm.setValueAt(playerList.get(i).getTeamName(), i, 0);
-				dtm.setValueAt(current, i, 1);
-				dtm.setValueAt(previous, i, 2);
-				dtm.setValueAt(sharpe, i, 3);
+				//dtm.setValueAt(current, i, 1);
+				//dtm.setValueAt(previous, i, 2);
+				dtm.setValueAt(sharpe, i, 1);
 
 				infoTable.updateUI();
 			}
@@ -531,7 +538,7 @@ public class Controller extends JApplet {
 	public void updateHistogram(List<Gamble> gambleList) {
 
 		for (Gamble p : gambleList) {
-			showPanel.update(String.valueOf(p.id), p.getLastResult());
+			showPanel.update(String.valueOf(p.id), p.getReturnValue());
 		}
 
 		showPanel.updateUI();
@@ -562,33 +569,33 @@ public class Controller extends JApplet {
 		NumberFormat formatter = new DecimalFormat("####.##");
 		if(MODE == 2)
 		{			
-			
-			String [] coloumTitle = {"Player","Current","Previous","Sharpe Ratio"};
+
+			String [] coloumTitle = {"Player","Sharpe Ratio"};
 			dtm = new DefaultTableModel(coloumTitle,0);
 			infoTable.setModel(dtm);
 			for(int i=0;i<playerList.size();i++)
 			{
 				Player  player = playerList.get(i);
 				String name = player.getTeamName();
-				String current = formatter.format(player.getWealth());
-				String previous = formatter.format(player.getPrevious());
+				//String current = formatter.format(player.getWealth());
+				//String previous = formatter.format(player.getPrevious());
 				String sharpe = formatter.format(player.getSharpeRatio());
-				String [] cols = {name,current,previous,sharpe};
+				String [] cols = {name,sharpe};
 				dtm.addRow(cols);
 				infoTable.updateUI();
 			}
 		}else
 		{
-			String [] coloumTitle = {"Player","Score","Profit/Loss"};
+			String [] coloumTitle = {"Player","Profit/Loss"};
 			dtm = new DefaultTableModel(coloumTitle,0);
 			infoTable.setModel(dtm);
 			for(int i=0;i<playerList.size();i++)
 			{
 				Player  player = playerList.get(i);
 				String name = player.getTeamName();
-				String score = formatter.format(player.getScore());
+				//String score = formatter.format(player.getScore());
 				String pnl = formatter.format(player.getPNL());
-				String [] cols = {name,score,pnl};
+				String [] cols = {name,pnl};
 				dtm.addRow(cols);
 				infoTable.updateUI();
 			}
@@ -632,7 +639,7 @@ public class Controller extends JApplet {
 		//operPanel.add(startButton);
 		//operPanel.add(playButton);
 
-		roundField.setText("10");
+		roundField.setText("0");
 
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -655,11 +662,11 @@ public class Controller extends JApplet {
 		infoPanel.setPreferredSize(new Dimension(300,100));
 		leftPanel.add(infoPanel,BorderLayout.CENTER);
 
-//		for (int i = 0; i < playerCount; i++) {
-//			Player gambler = new Player(i);
-//			playerList.add(gambler);
-//		}
-//
+		//		for (int i = 0; i < playerCount; i++) {
+		//			Player gambler = new Player(i);
+		//			playerList.add(gambler);
+		//		}
+		//
 		initTable();
 
 		infoPanel.getViewport().add(infoTable);
@@ -752,68 +759,123 @@ public class Controller extends JApplet {
 
 		testWithDummyData();
 	}
-	
+
 	/**
 	 * Only two possibilites 1 ,2
 	 */
 	public void setMode(int mode){
-		
+
 		if(mode == 1){
 			mode1Button.setSelected(true);
+			MODE =1;
 		}else{
 			mode2Button.setSelected(true);
+			MODE =2;
 		}
-		
+
 	}
-	
+
 	public void setNumberOfRounds(int rounds){
 		roundField.setText(rounds+"");
 	}
-	
+
 	public void setCurrentRound(int round){
 		roundDigit.setText(round+"");
 	}
-	
-	public void setPlayers(List<rky.portfolio.Player> players){
-		
-		for (int i = 0; i < playerCount; i++) {
-			Player gambler = new Player(i,players.get(i).name);
+
+	public void setPlayers(Set<rky.portfolio.Player> players){
+
+
+		Iterator<rky.portfolio.Player> iter = players.iterator();
+		int i = 0;
+		while (iter.hasNext()) {
+			
+			rky.portfolio.Player p = iter.next();
+			Player gambler = new Player(i,p.name);
+			mappIdtorkyPlayer.put(new Integer(gambler.id),p);
 			playerList.add(gambler);
+			i++;
 		}
 
 		initTable();
 	}
-	
+
+
+	public void updateScore(ScoreBoard sb){
+
+		for(int i = 0 ; i < playerList.size() ; i++){
+			if(sb.getMode() == ScoreBoard.GameMode.mode1){
+
+				Integer pid = playerList.get(i).id;
+				playerList.get(i).setPnl(sb.getFinalScore(mappIdtorkyPlayer.get(pid)));
+
+			}else{
+				Integer pid = playerList.get(i).id;
+				playerList.get(i).setSharpeRatio((sb.getFinalScore(mappIdtorkyPlayer.get(pid))));
+			}
+		}
+
+		updateInfoTable();
+	}
+
+	public void showGambles(Map<rky.portfolio.gambles.Gamble, rky.portfolio.gambles.Return> gameReturns,Map<rky.portfolio.gambles.Gamble, Integer> ids){
+
+		List<Gamble> gambleL = new ArrayList<Gamble>();
+
+		Iterator it = gameReturns.entrySet().iterator();
+
+		while (it.hasNext()) {
+
+			Map.Entry pairs = (Map.Entry)it.next();
+
+			Gamble g = new Gamble();
+			rky.portfolio.gambles.Gamble rkyG = (rky.portfolio.gambles.Gamble) pairs.getKey();
+			rky.portfolio.gambles.Return returnV = (rky.portfolio.gambles.Return)pairs.getValue();
+			//g.id = rkyG;
+			g.setReturnValue(rkyG.getV(returnV));
+			g.id = ids.get(rkyG);
+			gambleL.add(g);
+
+			//System.out.println(pairs.getKey() + " = " + pairs.getValue());
+		}
+		if(!isHistagramLoaded){
+			isHistagramLoaded = true;
+			loadHistogram(gambleL);
+		}
+		updateHistogram(gambleL);
+	}
+
 	public void testWithDummyData(){
-		
+
 		setMode(1);
-		setNumberOfRounds(200);
-		setCurrentRound(10);
-				
+		setNumberOfRounds(0);
+		setCurrentRound(0);
+
 		//List of players
 		List<rky.portfolio.Player> players = new ArrayList<rky.portfolio.Player>();
-		players.add(new rky.portfolio.Player("rky",null));
 		players.add(new rky.portfolio.Player("anyName",null));
-		setPlayers(players);
-		
+		players.add(new rky.portfolio.Player("anyName",null));
+		//players.add(new rky.portfolio.Player("anyName",null));
+		//players.add(new rky.portfolio.Player("anyName",null));
+		//players.add(new rky.portfolio.Player("anyName",null));
+
+		//setPlayers(players);
+
 		try {
 			List<Gamble> gambleList = PortfolioGenerator.generateGambles(GAMBLENUM, CLASSNUM);
-			
+
 			for(Gamble g: gambleList){
 				g.play();
 			}
-			
-			
+
+
 			loadHistogram(gambleList);
 			updateHistogram(gambleList);
 
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-
-		
-
+		}	
 	}
 }
