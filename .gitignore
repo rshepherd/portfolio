@@ -9,7 +9,6 @@ target
 
 # Java & package files #
 *.class
-*.jar
 *.war
 *.ear
 

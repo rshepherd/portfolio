@@ -92,7 +92,6 @@ public class GameLoop implements Runnable
 				disqualifyPlayer( player );
 			
 			Map<Gamble, Return> gambleReturns = playGambles();
-			System.out.println( "Gamble returns: " + gambleReturns );
 			
 			StringBuilder gambleReturnsStringBuilder = new StringBuilder("[");
 			for( Integer gambleId : gambles.keySet() )
@@ -112,19 +111,20 @@ public class GameLoop implements Runnable
 					continue;
 				
 				double profit = computeProfit( gambleReturns, playerMoneyDistributions.get(player) );
-				scoreBoard.add( currentTurn, player, profit );
+				scoreBoard.add( currentTurn, player, profit * scoreBoard.getBudget(currentTurn, player) );
 				
 				player.send( new Message(gambleReturnsString) );
 			}
-			
-			System.out.println( scoreBoard );
 		}
 	}
+	
+	public ScoreBoard getScoreBoard()
+    {
+        return scoreBoard;
+    }
 
 	private void disqualifyPlayer(Player player)
 	{
-		// TODO Auto-generated method stub
-		
 		disqualifiedPlayers.add( player );
 	}
 	
@@ -139,7 +139,8 @@ public class GameLoop implements Runnable
 		for( Integer gambleId : investments.keySet() )
 		{
 			Gamble g = gambles.get( gambleId );
-			profit += g.getV( gambleReturns.get(g) ) * investments.get(gambleId);
+			System.out.println( g + ": " + gambleReturns.get(g) + " " + investments.get(gambleId) );
+			profit += g.getV( gambleReturns.get(g) ) * investments.get(gambleId) - investments.get(gambleId);
 		}
 		return profit;
 	}
@@ -230,4 +231,5 @@ public class GameLoop implements Runnable
 		double currentBudget = scoreBoard.getStartBudget(currentTurn, player, gameMode);
 		// TODO send the player starting value "currentBudget"
 	}
+
 }

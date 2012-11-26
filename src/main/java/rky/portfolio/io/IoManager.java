@@ -1,5 +1,6 @@
 package rky.portfolio.io;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rky.portfolio.Player;
@@ -13,6 +14,7 @@ public class IoManager
     public IoManager(int port)
     {
         server = new Server(port);
+        listeners = new ArrayList<MessageListener>();
     }
 
     public Players connect(int numPlayers)
