@@ -23,6 +23,7 @@ public class Server
         try
         {
             serverSocket = new ServerSocket(port);
+            System.out.println("Server listening on port " + port);
         }
         catch (IOException e)
         {

@@ -28,6 +28,7 @@ public class FileManager
         {
             File file = new File(String.format(FILE_NAME, System.currentTimeMillis()));
             file.createNewFile();
+            file.setReadable(true, false);
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
             
@@ -68,8 +69,7 @@ public class FileManager
     // For game mode 1
     public static GameData readGameData(String clientInputFile)
     {   
-        String favorabilityFile = FileManager.class.getClassLoader().getResource("favorability.txt").getFile();
-        return readGameData(clientInputFile, favorabilityFile.substring(5));
+        return readGameData(clientInputFile, "favorability.txt");
     }
     
     // For game mode 2

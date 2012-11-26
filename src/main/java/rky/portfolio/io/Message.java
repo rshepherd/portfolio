@@ -16,9 +16,10 @@ public class Message
     
     public Message(String... body)
     {
+        this.body = "";
         for (String b : body)
         {
-            this.body += " " + b;
+            this.body += b + " ";
         }
     }
     
