@@ -792,8 +792,8 @@ public class Controller extends JApplet {
 				
 		//List of players
 		List<rky.portfolio.Player> players = new ArrayList<rky.portfolio.Player>();
-		players.add(new rky.portfolio.Player("rky"));
-		players.add(new rky.portfolio.Player("anyName"));
+		players.add(new rky.portfolio.Player("rky",null));
+		players.add(new rky.portfolio.Player("anyName",null));
 		setPlayers(players);
 		
 		try {
