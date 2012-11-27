@@ -126,14 +126,14 @@ public class GameLoop implements Runnable
 					continue;
 				
 				double profit = computeProfit( gambleReturns, playerMoneyDistributions.get(player) );
-				scoreBoard.add( currentTurn, player, profit * scoreBoard.getBudget(currentTurn, player) );
-				if(applet != null)
-					applet.updateScore(scoreBoard);
+				scoreBoard.add( currentTurn, player, profit * scoreBoard.getBudget(currentTurn, player) );				
+				player.send( new Message(gambleReturnsString));
 				
-				player.send( new Message(gambleReturnsString) );
 			}
-			if(applet != null)
+			if(applet != null){
 				applet.showGambles(gambleReturns, ids);
+				applet.updateScore(scoreBoard);
+			}
 		}
 	}
 	

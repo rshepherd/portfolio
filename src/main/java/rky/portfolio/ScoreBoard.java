@@ -40,7 +40,7 @@ public class ScoreBoard
 	Set<Player> players = new HashSet<Player>();
 	final GameMode mode;
 	ArrayList<Map<Player, BoardCell>> budgets;   //array is indexed by turn number
-	ArrayList<Double> returns = new ArrayList<Double>();
+	public HashMap<Player, ArrayList<Double>> returnValues = new HashMap<Player, ArrayList<Double>>();
 	public HashMap<Player,Integer> winMoves = new HashMap<Player,Integer>(); 
 	
 	public enum GameMode { mode1, mode2 };
@@ -55,10 +55,9 @@ public class ScoreBoard
 		}
 		for( Player p : players ) {
 			budgets.get(0).put(p, new BoardCell(1.0, 0));
-			
+			returnValues.put(p,new ArrayList<Double>());
 			winMoves.put(p, 0);
 		}
-		
 		
 	}
 	
@@ -104,7 +103,9 @@ public class ScoreBoard
 	public double caculateSharpeRatio(Player player,Double profit)
 	{
 
-		returns.add( profit);
+		ArrayList<Double> returns = returnValues.get(player);
+		returns.add(profit);
+		returnValues.put(player,returns);
 		
 		double sum = 0.0;
 		for(Double ret:returns)
@@ -132,7 +133,7 @@ public class ScoreBoard
 	{
 		BoardCell cell = budgets.get(turnNumber).get(player);
 		cell.profit = profit;
-		cell.sharpeRatio = caculateSharpeRatio(player,cell.startBudget + cell.profit);
+		cell.sharpeRatio = caculateSharpeRatio(player,profit);
 		
 		if(mode == GameMode.mode1){
 			budgets.get(turnNumber+1).put(player, new BoardCell(1, 0));

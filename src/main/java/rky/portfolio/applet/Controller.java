@@ -864,11 +864,6 @@ public class Controller extends JApplet {
 		List<rky.portfolio.Player> players = new ArrayList<rky.portfolio.Player>();
 		players.add(new rky.portfolio.Player("anyName",null));
 		players.add(new rky.portfolio.Player("anyName",null));
-		//players.add(new rky.portfolio.Player("anyName",null));
-		//players.add(new rky.portfolio.Player("anyName",null));
-		//players.add(new rky.portfolio.Player("anyName",null));
-
-		//setPlayers(players);
 
 		try {
 			List<Gamble> gambleList = PortfolioGenerator.generateGambles(GAMBLENUM, CLASSNUM);
