@@ -25,7 +25,6 @@ public class GameLoop implements Runnable
 	
 	final Map<Integer, Gamble>   gambles;
 	final Map<Gamble, Integer>   ids;
-
 	final SetMap<Gamble, Gamble> links;
 	final ClassFavorabilityMap   classes;
 	final Map<Gamble, Integer>   gambleClasses;
