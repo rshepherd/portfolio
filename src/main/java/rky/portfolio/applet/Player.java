@@ -10,7 +10,7 @@ public class Player {
 	
 	int id;
 	private double wealth;
-	private int score;
+	private double score;
 	private boolean cheated;
 	private ArrayList<Double> returns;
 	private double returnSum;
@@ -90,11 +90,11 @@ public class Player {
 		}
 	}
 
-	public int getScore() {
+	public double getScore() {
 		return score;
 	}
 
-	public void setScore(int score) {
+	public void setScore(double score) {
 		this.score = score;
 	}
 

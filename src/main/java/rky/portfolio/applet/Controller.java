@@ -334,12 +334,11 @@ public class Controller extends JApplet {
 			for(int i=0;i<playerList.size();i++)
 			{
 				Player  player = playerList.get(i);
-				//String score = formatter.format(player.getScore());
+				String score = formatter.format(player.getScore());
 				String PNL = formatter.format(player.getPnl());
 				String teamName = playerList.get(i).getTeamName();
 				dtm.setValueAt(teamName, i, 0);
-				//dtm.setValueAt(score, i, 1);
-				dtm.setValueAt(player.getScore(), i, 1);
+				dtm.setValueAt(score, i, 1);
 				dtm.setValueAt(PNL, i, 2);
 
 				infoTable.updateUI();
@@ -350,11 +349,8 @@ public class Controller extends JApplet {
 			for(int i=0;i<playerList.size();i++)
 			{
 				Player  player = playerList.get(i);
-				//String current = formatter.format(player.getWealth());
-				//String previous = formatter.format(player.getPrevious());
 				String sharpe = formatter.format(player.getSharpeRatio());
 				dtm.setValueAt(playerList.get(i).getTeamName(), i, 0);
-				//dtm.setValueAt(previous, i, 2);
 				dtm.setValueAt(sharpe, i, 1);
 
 				infoTable.updateUI();
@@ -813,7 +809,7 @@ public class Controller extends JApplet {
 
 				Integer pid = playerList.get(i).id;
 				playerList.get(i).setPnl(sb.getProfit(mappIdtorkyPlayer.get(pid)));
-				playerList.get(i).setScore((int)sb.getFinalScore(mappIdtorkyPlayer.get(pid)));
+				playerList.get(i).setScore(sb.getFinalScore(mappIdtorkyPlayer.get(pid)));
 
 			}else{
 				Integer pid = playerList.get(i).id;
