@@ -72,13 +72,14 @@ public class ScoreBoard
 		else
 		{
 
+			double mostRecentScore = 0.0;
 			for( Map<Player, BoardCell> map : budgets )
 			{
 				if( map.containsKey(player) )
-					return map.get(player).sharpeRatio;
+					mostRecentScore = map.get(player).sharpeRatio;
 			}
 
-			return 0.0;
+			return mostRecentScore;
 		}
 	}
 	public double getProfit( Player player )
@@ -88,11 +89,9 @@ public class ScoreBoard
 
 		for( Map<Player, BoardCell> map : budgets )
 		{
-			//Map<Player, BoardCell> map = budgets.get(0);
 
 			if( map.containsKey(player) ){
 				profit = map.get(player).profit;
-				break;
 			}
 		}
 

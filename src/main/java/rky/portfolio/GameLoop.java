@@ -128,12 +128,12 @@ public class GameLoop implements Runnable
 				double profit = computeProfit( gambleReturns, playerMoneyDistributions.get(player) );
 				scoreBoard.add( currentTurn, player, profit * scoreBoard.getBudget(currentTurn, player) );				
 				player.send( new Message(gambleReturnsString));
-				
 				if(applet != null){
 					applet.updateScore(scoreBoard);
-				}
+				}				
 				scoreBoard.resetScoreForNextTurn(currentTurn +1, player, profit * scoreBoard.getBudget(currentTurn, player) );				
 			}
+			
 			
 			if(applet != null){
 				applet.showGambles(gambleReturns, ids);
