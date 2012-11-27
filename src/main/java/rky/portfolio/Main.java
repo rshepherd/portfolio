@@ -103,12 +103,11 @@ public class Main
 		ScoreBoard scores = loop.getScoreBoard();
 		for (Player p : players)
 		{
-			p.send(Message.createGameOver(scores.getFinalScore(p,loop.currentTurn)));
+			p.send(Message.createGameOver(scores.getFinalScore(p,loop.currentTurn-1)));
 		}
 		
 		if(applet != null){
 			if(!loop.disqualifiedPlayers.isEmpty()){
-				
 				applet.setDisqualifiedPlayers(loop.disqualifiedPlayers);
 			}
 		}
