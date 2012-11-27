@@ -808,19 +808,22 @@ public class Controller extends JApplet {
 			if(MODE == 1){
 
 				Integer pid = playerList.get(i).id;
-				playerList.get(i).setPnl(sb.getProfit(mappIdtorkyPlayer.get(pid)));
-				playerList.get(i).setScore(sb.getFinalScore(mappIdtorkyPlayer.get(pid)));
+				playerList.get(i).setPnl(sb.getProfit(mappIdtorkyPlayer.get(pid),Integer.parseInt(roundDigit.getText()) -1 ));
+				playerList.get(i).setScore(sb.getFinalScore(mappIdtorkyPlayer.get(pid),Integer.parseInt(roundDigit.getText())-1 ));
 
 			}else{
 				Integer pid = playerList.get(i).id;
-				playerList.get(i).setSharpeRatio((sb.getFinalScore(mappIdtorkyPlayer.get(pid))));
+				playerList.get(i).setSharpeRatio((sb.getFinalScore(mappIdtorkyPlayer.get(pid),Integer.parseInt(roundDigit.getText()) -1 )));
 			}
+			
 		}
+		
 		if(!isTableLoaded){
 			isTableLoaded = true;
 			initTable();
 		}
 		updateInfoTable();
+		
 	}
 
 	public void showGambles(Map<rky.portfolio.gambles.Gamble, rky.portfolio.gambles.Return> gameReturns,Map<rky.portfolio.gambles.Gamble, Integer> ids){
