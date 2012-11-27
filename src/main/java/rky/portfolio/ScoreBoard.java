@@ -74,37 +74,13 @@ public class ScoreBoard
 		else
 		{
 			BoardCell cell = budgets.get(currentTurn).get(player);
-
-
-//			double mostRecentScore = 0.0;
-//			for( Map<Player, BoardCell> map : budgets )
-//			{
-//				if( map.containsKey(player) )
-//					mostRecentScore = map.get(player).sharpeRatio;
-//			}
-
-//			return mostRecentScore;
 			return cell.sharpeRatio;
 		}
 	}
 	public double getProfit(Player player ,int currentTurn)
 	{
-		
 		BoardCell cell = budgets.get(currentTurn).get(player);
 		return cell.profit;
-
-//		double profit = 0.0;
-//
-//
-//		for( Map<Player, BoardCell> map : budgets )
-//		{
-//
-//			if( map.containsKey(player) ){
-//				profit = map.get(player).profit;
-//			}
-//		}
-//
-//		return profit;
 	}
 
 	public double caculateSharpeRatio(Player player,Double profit)
@@ -142,9 +118,7 @@ public class ScoreBoard
 		cell.profit = profit;
 
 		if(mode == GameMode.mode1){
-
-			//budgets.get(turnNumber+1).put(player, new BoardCell(1, 0));	
-
+			
 			if(profit > cell.startBudget){
 
 				Integer winningMoves = winMoves.get(player);

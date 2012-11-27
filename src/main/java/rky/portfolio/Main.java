@@ -47,8 +47,6 @@ public class Main
 			startGUI();
 		}
 
-		
-
 		// Maybe generate a new set of gambles
 		String clientInputFile = argMap.get("-f");
 		if (clientInputFile == null)
@@ -106,6 +104,13 @@ public class Main
 		for (Player p : players)
 		{
 			p.send(Message.createGameOver(scores.getFinalScore(p,loop.currentTurn)));
+		}
+		
+		if(applet != null){
+			if(!loop.disqualifiedPlayers.isEmpty()){
+				
+				applet.setDisqualifiedPlayers(loop.disqualifiedPlayers);
+			}
 		}
 	}
 

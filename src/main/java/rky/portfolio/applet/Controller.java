@@ -92,7 +92,7 @@ public class Controller extends JApplet {
 	private DefaultTableModel dtm;
 
 	private final int WIDTH = 1195;
-	
+
 	boolean isHistagramLoaded = false;
 	boolean isTableLoaded = false;
 
@@ -524,7 +524,7 @@ public class Controller extends JApplet {
 		showPanel.setHistogramTitle("Return", "Gamble");
 
 		Collections.sort(gambleList);
-		
+
 		for (Gamble g : gambleList) {
 			showPanel.insert(String.valueOf(g.id), 0);
 		}
@@ -790,7 +790,7 @@ public class Controller extends JApplet {
 		Iterator<rky.portfolio.Player> iter = players.iterator();
 		int i = 0;
 		while (iter.hasNext()) {
-			
+
 			rky.portfolio.Player p = iter.next();
 			Player gambler = new Player(i,p.name);
 			mappIdtorkyPlayer.put(new Integer(gambler.id),p);
@@ -801,6 +801,37 @@ public class Controller extends JApplet {
 		initTable();
 	}
 
+	public void setDisqualifiedPlayers(Set<rky.portfolio.Player> players){
+
+		for(int i = 0 ; i < playerList.size() ; i++){
+			if(MODE == 1){
+				Integer pid = playerList.get(i).id;
+
+				for(rky.portfolio.Player p : players ){
+
+					if(mappIdtorkyPlayer.get(pid) == p){
+						playerList.get(i).setPnl(0);
+						playerList.get(i).setScore(0);
+						playerList.get(i).setTeamName("Disqualified: "+playerList.get(i).getTeamName());
+					}
+				}
+
+			}else{
+				Integer pid = playerList.get(i).id;
+
+				for(rky.portfolio.Player p : players ){
+
+					if(mappIdtorkyPlayer.get(pid) == p){				
+						playerList.get(i).setSharpeRatio(0);
+						playerList.get(i).setTeamName("Disqualified: "+playerList.get(i).getTeamName());
+
+					}
+				}
+			}
+			
+			updateInfoTable();
+		}
+	}
 
 	public void updateScore(ScoreBoard sb){
 
@@ -815,15 +846,15 @@ public class Controller extends JApplet {
 				Integer pid = playerList.get(i).id;
 				playerList.get(i).setSharpeRatio((sb.getFinalScore(mappIdtorkyPlayer.get(pid),Integer.parseInt(roundDigit.getText()) -1 )));
 			}
-			
+
 		}
-		
+
 		if(!isTableLoaded){
 			isTableLoaded = true;
 			initTable();
 		}
 		updateInfoTable();
-		
+
 	}
 
 	public void showGambles(Map<rky.portfolio.gambles.Gamble, rky.portfolio.gambles.Return> gameReturns,Map<rky.portfolio.gambles.Gamble, Integer> ids){
