@@ -133,12 +133,15 @@ public class GameLoop implements Runnable
 				scoreBoard.resetScoreForNextTurn(currentTurn +1, player, profit * scoreBoard.getBudget(currentTurn, player) );				
 			}
 			
-			
 			if(applet != null){
 				applet.showGambles(gambleReturns, ids);
 			}
 			
 		}
+		
+		if(applet != null){
+			applet.updateScore(scoreBoard);
+		}		
 	}
 	
 	public ScoreBoard getScoreBoard()

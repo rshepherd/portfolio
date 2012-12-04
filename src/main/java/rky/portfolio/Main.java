@@ -103,7 +103,7 @@ public class Main
 		ScoreBoard scores = loop.getScoreBoard();
 		for (Player p : players)
 		{
-			p.send(Message.createGameOver(scores.getFinalScore(p,loop.currentTurn-1)));
+			p.send(Message.createGameOver(scores.getStartBudget(loop.currentTurn-1, p, getModeEnum(mode))));
 		}
 		
 		if(applet != null){

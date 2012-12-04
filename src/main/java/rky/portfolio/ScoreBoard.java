@@ -77,6 +77,8 @@ public class ScoreBoard
 			return cell.sharpeRatio;
 		}
 	}
+
+	
 	public double getProfit(Player player ,int currentTurn)
 	{
 		BoardCell cell = budgets.get(currentTurn).get(player);

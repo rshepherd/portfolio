@@ -36,6 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import rky.portfolio.ScoreBoard;
+import rky.portfolio.ScoreBoard.GameMode;
 
 /*
  * Game Controller
@@ -178,8 +179,11 @@ public class Controller extends JApplet {
 
 		showPanel.init();
 		loadHistogram(gambleList);
-		updateInfoTable();
-
+		try{
+			updateInfoTable();
+		}catch (Exception e) {
+		}		
+		
 	}
 
 	/*
@@ -298,8 +302,10 @@ public class Controller extends JApplet {
 		computeReturnForOneRound();
 
 		updateHistogram(gambleList);
-		updateInfoTable();
-
+		try{
+			updateInfoTable();
+		}catch (Exception e) {
+		}		
 		roundDigit.setText(String.valueOf(currentRound));
 
 		if (currentRound == ROUND) {
@@ -341,7 +347,10 @@ public class Controller extends JApplet {
 				dtm.setValueAt(score, i, 1);
 				dtm.setValueAt(PNL, i, 2);
 
-				infoTable.updateUI();
+				try{
+					infoTable.updateUI();
+				}catch (Exception e) {
+				}
 			}
 
 		}else
@@ -350,10 +359,16 @@ public class Controller extends JApplet {
 			{
 				Player  player = playerList.get(i);
 				String sharpe = formatter.format(player.getSharpeRatio());
+				NumberFormat formatterd = new DecimalFormat("#0.00");
+				String amt = formatterd.format(player.getAmount());
 				dtm.setValueAt(playerList.get(i).getTeamName(), i, 0);
 				dtm.setValueAt(sharpe, i, 1);
+				dtm.setValueAt(amt, i, 2);
 
-				infoTable.updateUI();
+				try{
+					infoTable.updateUI();
+				}catch (Exception e) {
+				}			
 			}
 		}
 	}
@@ -571,7 +586,7 @@ public class Controller extends JApplet {
 		if(MODE == 2)
 		{			
 
-			String [] coloumTitle = {"Player","Sharpe Ratio"};
+			String [] coloumTitle = {"Player","Sharpe Ratio","Amount"};
 			dtm = new DefaultTableModel(coloumTitle,0);
 			infoTable.setModel(dtm);
 			for(int i=0;i<playerList.size();i++)
@@ -581,7 +596,9 @@ public class Controller extends JApplet {
 				//String current = formatter.format(player.getWealth());
 				//String previous = formatter.format(player.getPrevious());
 				String sharpe = formatter.format(player.getSharpeRatio());
-				String [] cols = {name,sharpe};
+				NumberFormat formatterd = new DecimalFormat("#0.00");
+				String amt = formatterd.format(player.getAmount());
+				String [] cols = {name,sharpe,amt};
 				dtm.addRow(cols);
 				infoTable.updateUI();
 			}
@@ -828,8 +845,12 @@ public class Controller extends JApplet {
 					}
 				}
 			}
+
 			
-			updateInfoTable();
+			try{
+				updateInfoTable();
+			}catch (Exception e) {
+			}		
 		}
 	}
 
@@ -845,6 +866,8 @@ public class Controller extends JApplet {
 			}else{
 				Integer pid = playerList.get(i).id;
 				playerList.get(i).setSharpeRatio((sb.getFinalScore(mappIdtorkyPlayer.get(pid),Integer.parseInt(roundDigit.getText()) -1 )));
+				int round = Integer.parseInt(roundDigit.getText())-1;
+				playerList.get(i).setAmount((sb.getStartBudget(round,mappIdtorkyPlayer.get(pid),GameMode.mode2)));
 			}
 
 		}
@@ -853,8 +876,10 @@ public class Controller extends JApplet {
 			isTableLoaded = true;
 			initTable();
 		}
-		updateInfoTable();
-
+		try{
+			updateInfoTable();
+		}catch (Exception e) {
+		}		
 	}
 
 	public void showGambles(Map<rky.portfolio.gambles.Gamble, rky.portfolio.gambles.Return> gameReturns,Map<rky.portfolio.gambles.Gamble, Integer> ids){
