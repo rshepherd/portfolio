@@ -183,7 +183,7 @@ public class Controller extends JApplet {
 			updateInfoTable();
 		}catch (Exception e) {
 		}		
-		
+
 	}
 
 	/*
@@ -359,8 +359,8 @@ public class Controller extends JApplet {
 			{
 				Player  player = playerList.get(i);
 				String sharpe = formatter.format(player.getSharpeRatio());
-				NumberFormat formatterd = new DecimalFormat("#0.00");
-				String amt = formatterd.format(player.getAmount());
+
+				String amt = formatNum(player.getAmount());
 				dtm.setValueAt(playerList.get(i).getTeamName(), i, 0);
 				dtm.setValueAt(sharpe, i, 1);
 				dtm.setValueAt(amt, i, 2);
@@ -596,8 +596,7 @@ public class Controller extends JApplet {
 				//String current = formatter.format(player.getWealth());
 				//String previous = formatter.format(player.getPrevious());
 				String sharpe = formatter.format(player.getSharpeRatio());
-				NumberFormat formatterd = new DecimalFormat("#0.00");
-				String amt = formatterd.format(player.getAmount());
+				String amt = formatNum(player.getAmount());
 				String [] cols = {name,sharpe,amt};
 				dtm.addRow(cols);
 				infoTable.updateUI();
@@ -846,7 +845,7 @@ public class Controller extends JApplet {
 				}
 			}
 
-			
+
 			try{
 				updateInfoTable();
 			}catch (Exception e) {
@@ -936,5 +935,33 @@ public class Controller extends JApplet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
+	}
+
+	private static final int MAX_LENGTH = 9;
+
+	private static String formatNum(double number) {
+	    int digitsAvailable = MAX_LENGTH - 2;
+	    if (Math.abs(number) < Math.pow(10, digitsAvailable)
+	            && Math.abs(number) > Math.pow(10, -digitsAvailable)) {
+	        String format = "0.";
+	        double temp = number;
+	        for (int i = 0; i < digitsAvailable; i++) {
+	            if ((temp /= 10) < 1) {
+	                format += "#";
+	            }
+	        }
+	        return new DecimalFormat(format).format(number);
+	    }
+	    String format = "0.";
+	    for (int i = 0; i < digitsAvailable; i++) {
+	            format += "#";
+	    }
+	    String r = new DecimalFormat(format + "E0").format(number);
+	    int lastLength = r.length() + 1;
+	    while (r.length() > MAX_LENGTH && lastLength > r.length()) {
+	        lastLength = r.length();
+	        r = r.replaceAll("\\.?[0-9]E", "E");
+	    }
+	    return r;
 	}
 }
